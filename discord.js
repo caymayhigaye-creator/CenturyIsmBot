@@ -35,8 +35,9 @@ client.on(Events.ClientReady, async readyClient => {
     ];
 
     try {
-        await client.user.edit({ accentColor: 0x000000 });
+        await client.user.setAvatar('https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUyajUwamdyeWttbWZnenBpbmY2bzdzYm5zMDhnNHQ4Z2FweTl6aXNpZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3ohs4CacylzFaHjMM8/200.gif');
         await client.user.setBanner('https://25.media.tumblr.com/tumblr_m9a12ceLYl1r13jn1o1_500.gif');
+        await client.user.edit({ accentColor: 0x000000 });
         await client.user.setStatus(PresenceUpdateStatus.Idle);
         setInterval(() => {
             const PickenActivity = Activites[Math.floor(Math.random() * Activites.length)];
