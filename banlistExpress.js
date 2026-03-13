@@ -6,7 +6,9 @@ app.use(express.json());
 app.post('/update-bans', async (req, res) => {
     const headers = req.headers;
     const key = headers['x-key'];
-    if (req.body.KEY && key === process.env.KEY) {
+    
+    
+    if (key && headers && key === process.env.KEY) {
         console.log('an information came from Roblox');
         const newBanList = req.body;
 
@@ -27,7 +29,9 @@ app.get('/get-bans', async (req, res) => {
     const headers = req.headers;
     const key = req.headers['x-key'];
 
-    if (req.body.KEY && key === process.env.KEY) {
+    console.log(key, process.env.KEY)
+
+    if (headers && key && key === process.env.KEY) {
         console.log('Posted ban list async.');
         res.json(storage.banList);
     } else {
