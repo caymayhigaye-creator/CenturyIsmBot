@@ -9,7 +9,7 @@ app.post('/update-bans', async (req, res) => {
     
     
     if (key && headers && key === process.env.KEY) {
-        console.log('an information came from Roblox');
+        console.log('an information came from Roblox (key succeded).');
         const newBanList = req.body;
 
          storage.banList = newBanList;
@@ -29,10 +29,8 @@ app.get('/get-bans', async (req, res) => {
     const headers = req.headers;
     const key = req.headers['x-key'];
 
-    console.log(key, process.env.KEY)
-
     if (headers && key && key === process.env.KEY) {
-        console.log('Posted ban list async.');
+        console.log('Posted ban list async. (key succeded)!');
         res.json(storage.banList);
     } else {
         console.log('The given key is false.');
