@@ -1,9 +1,10 @@
-import { Client, Events, GatewayIntentBits, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption } from 'discord.js';
+import { ActivityType, Client, Events, GatewayIntentBits, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption } from 'discord.js';
 import 'dotenv/config';
 import axios from 'axios';
 
 import commands from './commands.js';
 import {storage} from './banlistExpress.js';
+import { Activity } from 'react';
 
 
 const client = new Client({
@@ -29,7 +30,22 @@ async function registerCommands() {
 
 registerCommands();
 
-client.on(Events.ClientReady, readyClient => {
+client.on(Events.ClientReady, async readyClient => {
+    const Activites = [
+        {name: '@iaxtorez', type: ActivityType.Listening},
+        {name: '@centuryism', type: ActivityType.Watching},
+    ];
+
+    try {
+        setInterval(() => {
+            const PickenActivity = Activites[Math.floor(Math.random() * Activites.length)];
+            client.user.setActivity(PickenActivity.name, {
+                type: PickenActivity.type,
+            });
+        }, 10000);
+    } catch (err) {
+        console.log(err.message);
+    };
     console.log(`Bot Client Has Logged In: ${readyClient.user.username}`);
 });
 
