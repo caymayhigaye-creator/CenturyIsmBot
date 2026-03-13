@@ -4,8 +4,6 @@ import axios from 'axios';
 
 import commands from './commands.js';
 import {storage} from './banlistExpress.js';
-import { Activity } from 'react';
-
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds]
@@ -37,6 +35,7 @@ client.on(Events.ClientReady, async readyClient => {
     ];
 
     try {
+        await client.user.setBanner('');
         setInterval(() => {
             const PickenActivity = Activites[Math.floor(Math.random() * Activites.length)];
             client.user.setActivity(PickenActivity.name, {
