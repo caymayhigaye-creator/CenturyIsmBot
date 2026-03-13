@@ -1,4 +1,4 @@
-import { ActivityType, Client, Events, GatewayIntentBits, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption } from 'discord.js';
+import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption } from 'discord.js';
 import 'dotenv/config';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ const client = new Client({
 });
 
 const rest = new REST({ 
-    version: '10' 
+    version: '10'       
 }).setToken(process.env.DISCORD_TOKEN);
 
 async function registerCommands() {
@@ -35,7 +35,8 @@ client.on(Events.ClientReady, async readyClient => {
     ];
 
     try {
-        await client.user.setBanner('');
+        await client.user.setBanner('https://static.wikia.nocookie.net/disney/images/7/76/Universal_logo_2013.jpg/revision/latest?cb=20201106121113.png');
+        await client.user.setStatus(PresenceUpdateStatus.Idle);
         setInterval(() => {
             const PickenActivity = Activites[Math.floor(Math.random() * Activites.length)];
             client.user.setActivity(PickenActivity.name, {
