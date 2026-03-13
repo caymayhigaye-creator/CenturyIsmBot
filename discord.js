@@ -35,7 +35,7 @@ client.on(Events.ClientReady, async readyClient => {
     ];
 
     try {
-        await client.user.setBanner('https://static.wikia.nocookie.net/disney/images/7/76/Universal_logo_2013.jpg/revision/latest?cb=20201106121113.png');
+        await client.user.setBanner('https://25.media.tumblr.com/tumblr_m9a12ceLYl1r13jn1o1_500.gif');
         await client.user.setStatus(PresenceUpdateStatus.Idle);
         setInterval(() => {
             const PickenActivity = Activites[Math.floor(Math.random() * Activites.length)];
