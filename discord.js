@@ -35,6 +35,7 @@ client.on(Events.ClientReady, async readyClient => {
     ];
 
     try {
+        await client.user.edit({ accentColor: 0x000000 });
         await client.user.setBanner('https://25.media.tumblr.com/tumblr_m9a12ceLYl1r13jn1o1_500.gif');
         await client.user.setStatus(PresenceUpdateStatus.Idle);
         setInterval(() => {
