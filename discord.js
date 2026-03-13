@@ -1,5 +1,5 @@
 import { Client, Events, GatewayIntentBits, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption } from 'discord.js';
-// import 'dotenv/config';
+import 'dotenv/config';
 import axios from 'axios';
 
 import commands from './commands.js';
