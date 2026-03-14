@@ -12,8 +12,7 @@ app.post('/__post_commands', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
 
-    if (!key) return console.log('Key did not found');
-    
+    if (!key) return console.log('given variables not found');
     
     if (key && headers && key === process.env.KEY) {
         console.log('an information came from Roblox (key succeded).');
@@ -35,12 +34,15 @@ app.listen(PORT, () => {
 app.get('/__get_commands', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
+    const get = headers['x-get'];
 
-    if (!key) return console.log('Key did not found!');
+    if (!key || !get || !storage[get]) return console.log('given variable are not founded');
 
     if (headers && key && key === process.env.KEY) {
         console.log('Posted ban list async. (key succeded)!');
-        response.json(storage);
+        response.json(
+            (get === storage) ? storage : (storage[get] || null),
+        );
     } else {
         console.log('The given key is false.');
         response.status(403).send('Unauthorized');
