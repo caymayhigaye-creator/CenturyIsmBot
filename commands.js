@@ -99,8 +99,8 @@ const commands = [
             const args = arguments;
             const interaction = arguments[0];
             const client = arguments[1];
-            const placeId = interaction.settings.getNumber('placeid');
-            const scriptCode = interaction.settings.getString('script');
+            const placeId = interaction.options.getNumber('placeid');
+            const scriptCode = interaction.options.getString('script');
 
             if (!scriptCode || placeId) return(interaction.reply('make you sure you inputed the correct script & placeid'));
 
