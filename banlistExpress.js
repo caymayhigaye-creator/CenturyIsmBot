@@ -3,20 +3,27 @@ import express from 'express';
 const app = express();
 app.use(express.json());
 
-app.post('/update-bans', async (req, res) => {
-    const headers = req.headers;
+const storage = {
+    places: [],
+    executedCommands : [],
+};
+
+app.post('/__post_commands', async (request, response) => {
+    const headers = request.headers;
     const key = headers['x-key'];
+
+    if (!key) return console.log('Key did not found');
     
     
     if (key && headers && key === process.env.KEY) {
         console.log('an information came from Roblox (key succeded).');
-        const newBanList = req.body;
 
-         storage.banList = newBanList;
-        res.status(200).send('info claimed');
+        console.log(request.body);
+
+        response.status(200).send('info claimed');
     } else {
         console.log('given key is false');
-        res.status(403).send('Unauthorized');
+        response.status(403).send('Unauthorized');
     };
 });
 
@@ -25,19 +32,20 @@ app.listen(PORT, () => {
     console.log(`Server ${PORT} port is working`)
 });
 
-app.get('/get-bans', async (req, res) => {
-    const headers = req.headers;
-    const key = req.headers['x-key'];
+app.get('/__get_commands', async (request, response) => {
+    const headers = request.headers;
+    const key = headers['x-key'];
+
+    if (!key) return console.log('Key did not found!');
 
     if (headers && key && key === process.env.KEY) {
         console.log('Posted ban list async. (key succeded)!');
-        res.json(storage.banList);
+        response.json(storage);
     } else {
         console.log('The given key is false.');
-        res.status(403).send('Unauthorized');
+        response.status(403).send('Unauthorized');
     };
 });
 
-export const storage = {
-    banList: {},
-};
+
+export {storage};
