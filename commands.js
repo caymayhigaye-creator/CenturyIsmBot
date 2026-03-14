@@ -95,7 +95,7 @@ const commands = [
             .setRequired(true)
         ).toJSON(),
 
-        async Execute() {
+        async execute() {
             const args = arguments;
             const interaction = arguments[0];
             const client = arguments[1];
