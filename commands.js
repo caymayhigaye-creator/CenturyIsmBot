@@ -86,7 +86,7 @@ const commands = [
         .setDescription('Execute command in game')
         .addStringOption(option => 
             option.setName('placeid')
-            .description('text placeid where you want to execute the code')
+            .setDescription('text placeid where you want to execute the code')
             .setRequired(true)
         )
         .addStringOption(option => 
