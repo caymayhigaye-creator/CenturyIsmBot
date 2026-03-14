@@ -3,9 +3,7 @@ import 'dotenv/config';
 import axios from 'axios';
 
 import commands from './commands.js';
-import {storage} from './banlistExpress.js';
-
-awdpfokawfjıawfjıawf
+import {storage} from './storageExpress.js';
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds]
@@ -34,9 +32,11 @@ client.on(Events.ClientReady, async readyClient => {
     const Activites = [
         {name: '@iaxtorez', type: ActivityType.Listening},
         {name: '@centuryism', type: ActivityType.Watching},
+        {name: '@s4nan0 Herşey Sinan için.', type: ActivityType.Playing},
     ];
 
     try {
+        await client.user.setUsername('centerofury');
         await client.user.setAvatar('https://gifdb.com/images/high/blue-aesthetic-498-x-368-gif-yi9jb2a2s7va0pe6.gif');
         await client.user.setBanner('https://i.imgur.com/U2J9ZM0.gif');
         await client.user.edit({ accentColor: 0x000000 });

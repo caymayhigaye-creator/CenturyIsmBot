@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel} from "discord.js";
 import axios from 'axios';
-import {storage} from './banlistExpress.js';
+import {storage} from './storageExpress.js';
 
 const commands = [
     {
@@ -27,13 +27,11 @@ const commands = [
 
                 if (!userInfo) return interaction.reply('Invalid User Info');
                 if (isNaN(userInfo)) {
-                    const newuserData = await axios.post('https://users.roblox.com/v1/usernames/users', {
+                    const newuserResponse = await axios.post('https://users.roblox.com/v1/usernames/users', {
                         usernames: [userInfo]
                     });
-                    console.log(newuserData.data.data)
-                    console.log(newuserData.data.data.length)
-                    // if (!newuserData.data.data || newuserData.data.length === 0); return interaction.reply('User Has not Found!');
-                    userId = newuserData.data.data[0].id;
+                    const userData = await newuserResponse.data;
+                    userId = newuserData.data[0].id;
                 } else {
                     userId = userInfo;
                 };
@@ -46,10 +44,6 @@ const commands = [
                 const data = Profile.data;
                 const avatarUrl = Thumbnail.data.data[0].imageUrl;
 
-                console.log(data)
-                console.log(avatarUrl)
-
-
                 const embed = new EmbedBuilder()
                 .setTitle(`${data.displayName} (@${data.name})`)
                 .setThumbnail(avatarUrl)
@@ -59,7 +53,7 @@ const commands = [
                 .setFields(
                     {name: 'User Bio: ', value: data.description, inline: true},
                     {name: 'Is Verified?: ', value: data.hasVerifiedBadge ? 'Yes' : 'No', inline: true},
-                    {name: 'Banned?: ', value: data.isBanned ? 'Yes' : 'No'},
+                    {name: 'Banned?: ', value: data.isBanned ? 'Yes' : 'No', inline: false},
                     {name: 'Creation Time: ', value: data.created, inline: true},
                 )
                 .setTimestamp()
@@ -72,8 +66,7 @@ const commands = [
                 });
                 
             } catch(e) {
-                console.log(e.message)
-                interaction.reply('An error occured!');
+                interaction.reply(e.message);
             };
         },
 
@@ -99,20 +92,89 @@ const commands = [
             const args = arguments;
             const interaction = arguments[0];
             const client = arguments[1];
-            const placeId = interaction.options.getNumber('placeid');
+            const placeId = interaction.options.getString('placeid');
             const scriptCode = interaction.options.getString('script');
 
-            if (!scriptCode || placeId) return(interaction.reply('make you sure you inputed the correct script & placeid'));
+            if (!scriptCode || !placeId) return(interaction.reply('make you sure you inputed the correct script & placeid'));
 
             try {
+
+                const gameinfoPromise = new Promise(async (callback, err) => {
+                    const universeresponse = await axios.get(`https://apis.roblox.com/universes/v1/places/80790491696418/universe`); // 6787156005
+                    const universedata = await universeresponse.data;
+                    const universeId = universedata && universedata.universeId ? universedata.universeId : null;
+                    
+                    const gameinforesponse = await axios.get('https://games.roblox.com/v1/games?universeIds=6787156005');
+                    const gameinfodata = await gameinforesponse.data.data[0];
+                    
+                    if (gameinfodata) {
+                        return(callback(gameinfodata));
+                    } else {
+                        return(err('game info data not found.'))
+                    }
+                });
+                const gameinfo = await gameinfoPromise;
+                const gameImageResponse = await axios.get(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${gameinfo.id}&size=150x150&format=Png&isCircular=false`);
+                const gameImagedata = await gameImageResponse.data.data[0];
+                const gameImageUrl = await gameImagedata.imageUrl ? gameImagedata.imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThxpwPKHBP41r-01lGuLh4YE2Q7rG4EUv13A&s.png'
+
                 storage.executedCommands.push({
-                    placeid: placeid,
+                    placeid: placeId,
                     script: scriptCode,
                 });
 
-                interaction.reply(`placeid: ${placeid} \nscript: ${scriptCode}\n HAS EXECUTED!`);
+                console.log(storage.executedCommands);
+
+                const Embed = new EmbedBuilder()
+                .setTitle(`# **ExecutingScript: ${scriptCode}**`)
+                .setColor(0x66ff00)
+                .setDescription(`# **${gameinfo.name}**`)
+                .setThumbnail(gameImageUrl)
+                .addFields([
+                    {   
+                        name: `**━━ Game Info ━━**`, 
+                        value:
+                        `> **Name:** ${gameinfo.name}\n`+
+                        `> **Game Link:** [Link](https://roblox.com/games/${gameinfo.rootPlaceId})/\n`+
+                        `> **Active Players:** \`${gameinfo.playing}\`\n`+
+                        `> **Visits:** \`${gameinfo.visits}\`\n`
+                    , inline:true
+                    },
+                    {
+                        name: '**━━ Owner Info ━━**', 
+                        value: 
+                        `> **Creator Name:** \`${gameinfo.creator.name}\`\n`+ 
+                        `> **Creator Id:** \`${gameinfo.creator.id}\`\n`+
+                        `> **Creator Link:** [Link](https://roblox.com/users/${gameinfo.creator.id}/profile)\n`+
+                        `> **Verified: **${(gameinfo.creator.hasVerifiedBadge === true) ? '# **Yes**' : 'No'}`
+                        , inline:true
+                    },
+                    {
+                        name: '**━━ Settings ━━**',
+                        value:
+                        `> **AvatarRigType:** ${(gameinfo.universeAvatarType == 'MorphToR15') ? 'R15' : 'R6'}\n`+
+                        `> **API Enabled:** ${(gameinfo.studioAccessToApisAllowed == true) ? '# **Yes**' : 'No'}\n`+
+                        `> **Copying Allowed:** ${(gameinfo.copyingAllowed == true) ? '# **Yes**' : 'No'}`
+                        , inline:true
+                    },
+                    {
+                        name: '**━━ Join Code ━━**',
+                        value: `\`\`\`js\n`+
+                        `javascript:Roblox.GameLauncher.joinGameInstance(${gameinfo.rootPlaceId}, ${null});\n`+
+                        `\`\`\``
+                        , inline: false,
+                    },
+                    
+                ])
+                .setTimestamp(new Date())
+                .setFooter({text: 'Game Has Detected'});    
+
+                interaction.reply({
+                    embeds: [Embed],
+                });
+                
             } catch(e) {
-                interaction.reply('something went wrong sorry brotha');
+                interaction.reply(e.message);
             };
         },
     },
