@@ -1,5 +1,6 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel} from "discord.js";
 import axios from 'axios';
+import { storage } from "./banlistExpress";
 
 const commands = [
     {
@@ -76,6 +77,42 @@ const commands = [
             };
         },
 
+    },
+    {
+        name: 'executecommand',
+
+        data : new SlashCommandBuilder()
+        .setName('executecommand')
+        .setDescription('Execute command in game')
+        .addStringOption(option => 
+            option.setName('placeid')
+            .description('text placeid where you want to execute the code')
+            .setRequired(true)
+        )
+        .addStringOption(option => 
+            option.setName('script')
+            .setDescription('put here the script what you want to execute')
+            .setRequired(true)
+        ).toJSON(),
+
+        async Execute() {
+            const args = arguments;
+            const interaction = arguments[0];
+            const client = arguments[1];
+            const placeId = interaction.settings.getNumer('placeid');
+            const scriptCode = interaction.settings.getString('script');
+
+            if (!scriptCode || placeId) return(interaction.reply('make you sure you inputed the correct script & placeid'));
+
+            try {
+                storage.executedCommands.push({
+                    placeid: placeid,
+                    script: scriptCode,
+                });
+            } catch(e) {
+                interaction.reply('something went wrong sorry brotha');
+            };
+        },
     },
 ];
 
