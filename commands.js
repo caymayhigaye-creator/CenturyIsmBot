@@ -109,6 +109,8 @@ const commands = [
                     placeid: placeid,
                     script: scriptCode,
                 });
+
+                interaction.reply(`placeid: ${placeid} \nscript: ${scriptCode}\n HAS EXECUTED!`);
             } catch(e) {
                 interaction.reply('something went wrong sorry brotha');
             };
