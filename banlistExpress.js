@@ -36,7 +36,7 @@ app.get('/__get_commands', async (request, response) => {
     const key = headers['x-key'];
     const get = headers['x-get'];
 
-    if (!key || !get || !storage[get]) return console.log('given variable are not founded');
+    if (!key || !get) return console.log('given variable are not founded');
 
     if (headers && key && key === process.env.KEY) {
         console.log('Posted ban list async. (key succeded)!');
