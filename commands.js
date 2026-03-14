@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel} from "discord.js";
 import axios from 'axios';
-import { storage } from "./banlistExpress.js";
+import './banlistExpress.js';
 
 const commands = [
     {
