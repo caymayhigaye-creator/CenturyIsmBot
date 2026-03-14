@@ -41,7 +41,7 @@ app.get('/__get_commands', async (request, response) => {
     if (headers && key && key === process.env.KEY) {
         console.log('Posted ban list async. (key succeded)!');
         response.json(
-            (get === storage) ? storage : (storage[get] || null),
+            (get.toLowerCase() === 'storage') ? storage : (storage[get] || null),
         );
     } else {
         console.log('The given key is false.');
