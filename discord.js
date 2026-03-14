@@ -5,6 +5,8 @@ import axios from 'axios';
 import commands from './commands.js';
 import {storage} from './banlistExpress.js';
 
+awdpfokawfjıawfjıawf
+
 const client = new Client({
     intents: [GatewayIntentBits.Guilds]
 });
