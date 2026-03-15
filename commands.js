@@ -231,7 +231,6 @@ const commands = [
                     embeds: [verifiyEmbed],
                 });
                 
-                console.log(typeof newMessage.react)
                 await newMessage.react(getReaction);
 
                 client.on(Events.MessageReactionAdd, async (reaction, user) => {

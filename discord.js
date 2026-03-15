@@ -54,6 +54,14 @@ client.on(Events.ClientReady, async readyClient => {
     console.log(`Bot Client Has Logged In: ${readyClient.user.username}`);
 });
 
+client.on(Events.MessageReactionAdd, async (reaction, user) => {
+    if (!user.bot) {
+        console.log(reaction)
+    } else {
+        console.log('Bot detected')
+    }
+});
+
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
