@@ -233,7 +233,7 @@ const commands = [
                 const newMessageId = await newMessage.id;
                 const newMessageFecth = await interaction.channel.messages.fetch(newMessageId);
 
-                newMessageFecth.react(getReaction);
+                await newMessageFecth.react(getReaction);
 
                 client.on(Events.MessageReactionAdd, async (reaction, user) => {
                     if (!user.bot) {
