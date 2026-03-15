@@ -21,8 +21,6 @@ app.delete('/centuryism', async (request, response) => {
     response.json('sa knk');
 });
 
-OSPFESIJFAJKGFAJIGAIJGIAGWKGIWAGJAIWGJAJG
-
 app.post('/centuryism', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];

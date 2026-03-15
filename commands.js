@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events} from "discord.js";
 import axios from 'axios';
 import { ExpressStorage } from './storageExpress.js';
+import { BotStorage } from "./BotStorage.js";
 
 const commands = [
     {
@@ -214,18 +215,11 @@ const commands = [
             };
 
             let ReactionData;
-            if (ExpressStorage.ReactionData) {
+            if (BotStorage.ReactionData) {
                 setTimeout(() => {
                     return(interaction.deleteReply());
                 }, 3000);
                 return(interaction.reply('Reaction data has already been initilized'));
-            } else {
-                ExpressStorage.ReactionData = {};
-                ReactionData = ExpressStorage.ReactionData;
-                
-                ReactionData.ReactionEmoji = getReaction;
-                ReactionData.Channel = interaction.channel;
-                ReactionData.MessageId = null;
             };
 
             try {
@@ -245,6 +239,12 @@ const commands = [
                 const newMessage = await channel.send({
                     embeds: [verifiyEmbed],
                 });
+
+                BotStorage.ReactionData = {};
+                const ReactionData = BotStorage.ReactionData;
+                
+                ReactionData.ReactionEmoji = getReaction;
+                ReactionData.Channel = interaction.channel;
                 ReactionData.MessageId = newMessage.id;
                 
                 await newMessage.react(getReaction);

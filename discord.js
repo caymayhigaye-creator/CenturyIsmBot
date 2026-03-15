@@ -1,4 +1,4 @@
-import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption, Partials} from 'discord.js';
+import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption, Partials, RoleManager} from 'discord.js';
 import 'dotenv/config';
 import axios from 'axios';
 
@@ -64,19 +64,18 @@ client.on(Events.ClientReady, async readyClient => {
 });
 
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
-    if (reaction.partial) await reaction.fetch();
+    console.log(BotStorage)
     if (BotStorage.ReactionData) {
         if (!user.bot) {
             if (reaction.message.id === BotStorage.ReactionData.MessageId && reaction.emoji.name === BotStorage.ReactionData.ReactionEmoji) {
                 const guild = reaction.message.guild;
-
                 let role = guild.roles.cache.find(r => r.name === process.env.VERIFIED_ROLE_NAME);
                 
                 if (!role) {
                     try {
                         role = await guild.roles.create({
-                            name: process.env.VERIFIED_ROLE_NAME,
-                            color: 'Blue',
+                            name: `${process.env.VERIFIED_ROLE_NAME}`,
+                            color: 0x3498DB,
                             reason: 'Verified Role to access channels.',
                         });
                         console.log('Role has not founded creating a new role');
@@ -93,6 +92,8 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
                 }
             };
         };
+    } else {
+        console.log('ReactionData is not founded');
     };
 });
 
