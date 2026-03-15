@@ -37,7 +37,6 @@ client.on(Events.ClientReady, async readyClient => {
 
     try {
         await client.user.setUsername('centerofury');
-        await client.user.setPresence()
         await client.user.setAvatar('https://gifdb.com/images/high/blue-aesthetic-498-x-368-gif-yi9jb2a2s7va0pe6.gif');
         await client.user.setBanner('https://i.imgur.com/U2J9ZM0.gif');
         await client.user.edit({ accentColor: 0x000000 });

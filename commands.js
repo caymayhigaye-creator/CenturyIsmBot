@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder} from "discord.js";
 import axios from 'axios';
 import {storage} from './storageExpress.js';
 
@@ -95,7 +95,12 @@ const commands = [
             const placeId = interaction.options.getString('placeid');
             const scriptCode = interaction.options.getString('script');
 
-            if (!scriptCode || !placeId) return(interaction.reply('make you sure you inputed the correct script & placeid'));
+            if (!scriptCode || !placeId) 
+                {
+                    return(interaction.reply('make you sure you inputed the correct script & placeid'))
+                } else if (!storage.savedGames[String(placeid)]) {
+                    return(interaction.reply('The game is not found in backdoor saved games.'));
+                } else {return(interaction.reply('Something went wrong idk!'))};
 
             try {
 

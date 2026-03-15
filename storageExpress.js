@@ -4,9 +4,7 @@ const app = express();
 app.use(express.json());
 
 const storage = {
-    places: [],
-    executedCommands : {
-    },
+    savedGames: {},
 };
 
 const PORT = process.env.PORT || 3000;
