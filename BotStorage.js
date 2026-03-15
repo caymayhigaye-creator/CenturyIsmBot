@@ -1,3 +1,21 @@
+import { NewsChannel } from "discord.js";
+import mongoose from "mongoose";
+
+mongoose.connect(process.env.MONGO_URL).then(() => {
+    console.log('Mongodb has initalized');
+}).catch((reason) => {
+    console.log('Mongo db is not initalized', reason)
+})
+
 const BotStorage = {};
 
-export {BotStorage};
+const NewSchema = new mongoose.Schema({
+    ReactionEmoji: String,
+    Channel: String,
+    MessageId: String,
+    GuildId: String,
+});
+
+const ReactionModel = mongoose.model('ReactionData', NewSchema);
+
+export {BotStorage, ReactionModel};

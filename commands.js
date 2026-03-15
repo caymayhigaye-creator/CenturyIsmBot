@@ -1,7 +1,9 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events} from "discord.js";
+import mongoose, { Mongoose } from "mongoose";
 import axios from 'axios';
+import mongoose from "mongoose";
 import { ExpressStorage } from './storageExpress.js';
-import { BotStorage } from "./BotStorage.js";
+import { BotStorage, ReactionModel } from "./BotStorage.js";
 
 const commands = [
     {
@@ -242,14 +244,27 @@ const commands = [
 
                 BotStorage.ReactionData = {};
                 const ReactionData = BotStorage.ReactionData;
-                
                 ReactionData.ReactionEmoji = getReaction;
                 ReactionData.Channel = interaction.channel;
                 ReactionData.MessageId = newMessage.id;
+
+                await ReactionModel.findOneAndUpdate(
+                    {guildId: interaction.guild.id},
+                    {
+                        ReactionEmoji: getReaction,
+                        Channel: channel,
+                        MessageId: newMessage.id,
+                        GuildId: interaction.guild.id,
+                    },
+                    {
+                        upsert: true,
+                        new: true
+                    },
+                );
                 
                 await newMessage.react(getReaction);
 
-                await interaction.reply('Message succesfully created!')
+                await interaction.reply('Message succesfully created & saved!')
                 setTimeout(() => {
                     interaction.deleteReply();
                 }, 3000);

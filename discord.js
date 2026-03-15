@@ -4,7 +4,8 @@ import axios from 'axios';
 
 import commands from './commands.js';
 import { ExpressStorage } from './storageExpress.js';
-import { BotStorage } from './BotStorage.js';
+import { BotStorage, ReactionModel } from './BotStorage.js';
+import mongoose from 'mongoose';
 
 const client = new Client({
     intents: [
@@ -60,6 +61,28 @@ client.on(Events.ClientReady, async readyClient => {
     } catch (err) {
         console.log(err.message);
     };
+
+
+    try {
+        const SavedData = await ReactionModel.findOne({});
+
+        if (SavedData) {
+            BotStorage.ReactionData = {
+                ReactionEmoji: SavedData.ReactionEmoji,
+                Channel: SavedData.Channel,
+                MessageId: SavedData.MessageId,
+                GuildId: SavedData.GuildId,   
+            };
+
+            console.log('Data has initalized!');
+        } else {
+            console.log('Data has not initalized!');
+        };
+    } catch(e) {
+        console.log('An error occured while initalizing data.')
+    };
+
+
     console.log(`Bot Client Has Logged In: ${readyClient.user.username}`);
 });
 
