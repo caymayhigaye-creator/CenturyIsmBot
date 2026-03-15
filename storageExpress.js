@@ -8,7 +8,17 @@ const storage = {
     executedCommands : [],
 };
 
-app.post('/__post_commands', async (request, response) => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server ${PORT} port is working`)
+});
+
+app.delete('/centuryism', async (request, response) => {
+    const headers = request.headers;
+    const key = headers['x-key'];
+});
+
+app.post('/centuryism', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
 
@@ -26,12 +36,7 @@ app.post('/__post_commands', async (request, response) => {
     };
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server ${PORT} port is working`)
-});
-
-app.get('/__get_commands', async (request, response) => {
+app.get('/centuryism', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
     const get = headers['x-get'];
