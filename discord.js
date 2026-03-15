@@ -64,11 +64,36 @@ client.on(Events.ClientReady, async readyClient => {
 });
 
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
-    if (!user.bot) {
-        console.log(reaction)
-    } else {
-        console.log('Bot detected')
-    }
+    if (reaction.partial) await reaction.fetch();
+    if (BotStorage.ReactionData) {
+        if (!user.bot) {
+            if (reaction.message.id === BotStorage.ReactionData.MessageId && reaction.emoji.name === BotStorage.ReactionData.ReactionEmoji) {
+                const guild = reaction.message.guild;
+
+                let role = guild.roles.cache.find(r => r.name === process.env.VERIFIED_ROLE_NAME);
+                
+                if (!role) {
+                    try {
+                        role = await guild.roles.create({
+                            name: process.env.VERIFIED_ROLE_NAME,
+                            color: 'Blue',
+                            reason: 'Verified Role to access channels.',
+                        });
+                        console.log('Role has not founded creating a new role');
+                        } catch(e) {
+                        console.log('Role already exists.');
+                    };
+                };
+
+                try {
+                    const member = await guild.members.fetch(user.id);
+                    await member.roles.add(role);
+                } catch(e) {
+                    console.log(e.message);
+                }
+            };
+        };
+    };
 });
 
 client.on(Events.InteractionCreate, async interaction => {

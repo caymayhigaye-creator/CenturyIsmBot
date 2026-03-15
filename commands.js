@@ -215,11 +215,10 @@ const commands = [
 
             let ReactionData;
             if (ExpressStorage.ReactionData) {
-                return(interaction.reply('Reaction data has already been initilized'));
-
                 setTimeout(() => {
                     return(interaction.deleteReply());
                 }, 3000);
+                return(interaction.reply('Reaction data has already been initilized'));
             } else {
                 ExpressStorage.ReactionData = {};
                 ReactionData = ExpressStorage.ReactionData;
