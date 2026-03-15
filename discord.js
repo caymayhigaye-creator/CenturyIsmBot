@@ -1,4 +1,4 @@
-import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption, Partials, RoleManager} from 'discord.js';
+import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption, Partials, RoleManager, transformResolved} from 'discord.js';
 import 'dotenv/config';
 import axios from 'axios';
 
@@ -89,7 +89,7 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
                     await member.roles.add(role);
                 } catch(e) {
                     console.log(e.message);
-                }
+                };
             };
         };
     } else {
@@ -101,9 +101,19 @@ client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
     const command = commands.find(c => c.name === interaction.commandName);
+    const accesCommandRole = interaction.guild.roles.cache.get(process.env.PERMISSIONED_ROLE_ID);
+    const userPermission = interaction.member.roles.highest;
+
 
     if (command) {
-        await command.execute(interaction, client);
+        if (userPermission.position > accesCommandRole.position) {
+            return(await command.execute(interaction, client));
+        } else {
+            return(interaction.reply({
+                content: 'You are not permissioned to use that command.',
+                ephemeral: true,
+            }));
+        };
     };
 });
 
