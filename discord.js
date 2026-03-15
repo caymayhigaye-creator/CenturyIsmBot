@@ -97,6 +97,8 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
     };
 });
 
+IO9AWJKFWAJFIAWJFAIF
+
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
@@ -104,6 +106,12 @@ client.on(Events.InteractionCreate, async interaction => {
     const accesCommandRole = interaction.guild.roles.cache.get(process.env.PERMISSIONED_ROLE_ID);
     const userPermission = interaction.member.roles.highest;
 
+    if (!accesCommandRole) {
+        return(interaction.reply({
+            content: 'Rol bulunmadı knk',
+            ephemeral: true,
+        }));
+    };
 
     if (command) {
         if (userPermission.position > accesCommandRole.position) {
