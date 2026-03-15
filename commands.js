@@ -233,14 +233,10 @@ const commands = [
                 
                 await newMessage.react(getReaction);
 
-                client.on(Events.MessageReactionAdd, async (reaction, user) => {
-                    if (!user.bot) {
-                        console.log(user.tag, 'reacted')
-                    } else {
-                        console.log('Bot detected')
-                    };
-                });
-
+                await interaction.reply('Message succesfully created!')
+                setTimeout(() => {
+                    interaction.deleteReply();
+                }, 3000);
             } catch(e) {
                 interaction.reply(e.message);
                 setTimeout(() => {

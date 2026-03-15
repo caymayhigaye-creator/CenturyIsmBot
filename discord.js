@@ -1,4 +1,4 @@
-import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption } from 'discord.js';
+import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption, Partials} from 'discord.js';
 import 'dotenv/config';
 import axios from 'axios';
 
@@ -7,7 +7,16 @@ import { ExpressStorage } from './storageExpress.js';
 import { BotStorage } from './BotStorage.js';
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds]
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+    ],
+    partials: [
+        Partials.Message,
+        Partials.Channel,
+        Partials.Reaction,
+    ],
 });
 
 const rest = new REST({ 
