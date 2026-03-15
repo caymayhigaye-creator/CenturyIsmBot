@@ -98,7 +98,7 @@ const commands = [
             if (!scriptCode || !placeId) 
                 {
                     return(interaction.reply('make you sure you inputed the correct script & placeid'))
-                } else if (!storage.savedGames[String(placeid)]) {
+                } else if (!storage.savedGames[String(placeId)]) {
                     return(interaction.reply('The game is not found in backdoor saved games.'));
                 } else {return(interaction.reply('Something went wrong idk!'))};
 
