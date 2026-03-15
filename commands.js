@@ -230,8 +230,10 @@ const commands = [
                 const newMessage = channel.send({
                     embeds: [verifiyEmbed],
                 });
+                const newMessageId = await newMessage.id;
+                const newMessageFecth = await interaction.channel.messages.fetch(newMessageId);
 
-                await newMessage.react(getReaction);
+                newMessageFecth.react(getReaction);
 
                 client.on(Events.MessageReactionAdd, async (reaction, user) => {
                     if (!user.bot) {
