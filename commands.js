@@ -227,10 +227,11 @@ const commands = [
                 const channel = await interaction.channel;
                 await channel.bulkDelete(100, true);
 
-                const newMessage = channel.send({
+                const newMessage = await channel.send({
                     embeds: [verifiyEmbed],
                 });
                 
+                console.log(typeof newMessage.react)
                 await newMessage.react(getReaction);
 
                 client.on(Events.MessageReactionAdd, async (reaction, user) => {
