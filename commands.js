@@ -246,14 +246,15 @@ const commands = [
                 ReactionData.ReactionEmoji = getReaction;
                 ReactionData.Channel = interaction.channel;
                 ReactionData.MessageId = newMessage.id;
+                ReactionData.GuildId = 
 
                 await ReactionModel.findOneAndUpdate(
-                    {guildId: interaction.guild.id},
+                    {guildId: interaction.guildId},
                     {
                         ReactionEmoji: getReaction,
                         Channel: channel,
                         MessageId: newMessage.id,
-                        GuildId: interaction.guild.id,
+                        GuildId: interaction.guildId,
                     },
                     {
                         upsert: true,
