@@ -3,7 +3,7 @@ import express from 'express';
 const app = express();
 app.use(express.json());
 
-const storage = {
+const ExpressStorage = {
     savedGames: {},
 };
 
@@ -50,7 +50,7 @@ app.get('/centuryism', async (request, response) => {
     if (headers && key && key === process.env.KEY) {
         console.log('Posted ban list async. (key succeded)!');
         response.json(
-            (get.toLowerCase() === 'storage') ? storage : (storage[get] || null),
+            (get.toLowerCase() === 'expressstorage') ? ExpressStorage : (ExpressStorage[get] || null),
         );
     } else {
         console.log('The given key is false.');
@@ -59,4 +59,4 @@ app.get('/centuryism', async (request, response) => {
 });
 
 
-export {storage};
+export {ExpressStorage};
