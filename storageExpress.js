@@ -5,7 +5,8 @@ app.use(express.json());
 
 const storage = {
     places: [],
-    executedCommands : [],
+    executedCommands : {
+    },
 };
 
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.delete('/centuryism', async (request, response) => {
 app.post('/centuryism', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
+    const data = headers['x-data'];
 
     if (!key) return console.log('given variables not found');
     
