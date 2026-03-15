@@ -5,7 +5,7 @@ import axios from 'axios';
 import commands from './commands.js';
 import { ExpressStorage } from './storageExpress.js';
 import { BotStorage, ReactionModel } from './BotStorage.js';
-import mongoose from 'mongoose';
+
 
 const client = new Client({
     intents: [

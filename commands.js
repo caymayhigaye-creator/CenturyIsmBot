@@ -1,7 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events} from "discord.js";
 import mongoose, { Mongoose } from "mongoose";
 import axios from 'axios';
-import mongoose from "mongoose";
 import { ExpressStorage } from './storageExpress.js';
 import { BotStorage, ReactionModel } from "./BotStorage.js";
 
