@@ -191,11 +191,11 @@ const commands = [
         data: new SlashCommandBuilder()
         .setName('reacttoacces')
         .setDescription('Create react accesing to the server!')
-        .addStringOption(option => {
+        .addStringOption(option => 
             option.setName('reaction')
-            option.setDescription('What kind emoji you want people to react and get verified')
-            option.setRequired(true)
-        }).toJSON(),
+            .setDescription('What kind emoji you want people to react and get verified')
+            .setRequired(true)
+        ).toJSON(),
 
         async execute() {
             const args = arguments;
