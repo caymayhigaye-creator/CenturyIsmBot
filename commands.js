@@ -245,6 +245,7 @@ const commands = [
                 interaction.reply(e.message);
                 setTimeout(() => {
                     interaction.deleteReply();
+                    
                 }, 3000);
             };
         },
