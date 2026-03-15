@@ -3,7 +3,8 @@ import 'dotenv/config';
 import axios from 'axios';
 
 import commands from './commands.js';
-import {storage} from './storageExpress.js';
+import { ExpressStorage } from './storageExpress.js';
+import { BotStorage } from './BotStorage.js';
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds]
@@ -24,7 +25,7 @@ async function registerCommands() {
     } catch(e) {
         console.error('Commands did not loaded.:', e.message);
     }
-}
+};
 
 registerCommands();
 
@@ -57,7 +58,7 @@ client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
     const command = commands.find(c => c.name === interaction.commandName);
-    
+
     if (command) {
         await command.execute(interaction, client);
     };
