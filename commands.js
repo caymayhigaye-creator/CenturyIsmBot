@@ -123,12 +123,14 @@ const commands = [
                 const gameImagedata = await gameImageResponse.data.data[0];
                 const gameImageUrl = await gameImagedata.imageUrl ? gameImagedata.imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThxpwPKHBP41r-01lGuLh4YE2Q7rG4EUv13A&s.png'
 
-                storage.executedCommands.push({
-                    placeid: placeId,
-                    script: scriptCode,
-                });
+                if (storage.savedGames[String(placeId)] && storage.savedGames[String(placeId)].executedCommands) {
+                    storage.savedGames[String(placeId)].executedCommands.push({
+                        placeId: placeId,
+                        Source : scriptCode,
+                    });
+                };
 
-                console.log(storage.executedCommands);
+                console.log(storage.savedGames);
 
                 const Embed = new EmbedBuilder()
                 .setTitle(`# **ExecutingScript: ${scriptCode}**`)
