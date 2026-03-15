@@ -254,11 +254,12 @@ const commands = [
                         ReactionEmoji: getReaction,
                         Channel: channel,
                         MessageId: newMessage.id,
-                        GuildId: interaction.guildId,
+                        guildId: interaction.guildId,
                     },
                     {
                         upsert: true,
-                        new: true
+                        new: true,
+                        setDefaultsOnInsert: true,
                     },
                 );
                 

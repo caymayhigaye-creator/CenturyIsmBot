@@ -13,7 +13,12 @@ const NewSchema = new mongoose.Schema({
     ReactionEmoji: String,
     Channel: String,
     MessageId: String,
-    GuildId: String,
+    guildId: {
+        type: String,
+        required: true,
+    },
+}, {
+    strict: true
 });
 
 const ReactionModel = mongoose.model('ReactionData', NewSchema);
