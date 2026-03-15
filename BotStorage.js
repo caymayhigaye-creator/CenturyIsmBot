@@ -1,0 +1,3 @@
+const BotStorage = {};
+
+export {BotStorage};
