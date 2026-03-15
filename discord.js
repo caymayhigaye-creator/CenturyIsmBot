@@ -1,4 +1,4 @@
-import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption, Partials, RoleManager, transformResolved} from 'discord.js';
+import { ActivityType, Client, Events, GatewayIntentBits, PresenceUpdateStatus, REST, Routes, SlashCommandBuilder, SlashCommandNumberOption, Partials, RoleManager, transformResolved, InteractionResponse} from 'discord.js';
 import 'dotenv/config';
 import axios from 'axios';
 
@@ -97,8 +97,6 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
     };
 });
 
-IO9AWJKFWAJFIAWJFAIF
-
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
@@ -108,13 +106,13 @@ client.on(Events.InteractionCreate, async interaction => {
 
     if (!accesCommandRole) {
         return(interaction.reply({
-            content: 'Rol bulunmadı knk',
+            content: 'Role is not avaible.',
             ephemeral: true,
         }));
     };
 
     if (command) {
-        if (userPermission.position > accesCommandRole.position) {
+        if (userPermission.position >= accesCommandRole.position) {
             return(await command.execute(interaction, client));
         } else {
             return(interaction.reply({
