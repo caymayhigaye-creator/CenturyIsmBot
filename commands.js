@@ -31,7 +31,7 @@ const commands = [
                         usernames: [userInfo]
                     });
                     const userData = await newuserResponse.data;
-                    userId = newuserData.data[0].id;
+                    userId = await userData.data[0].id;
                 } else {
                     userId = userInfo;
                 };
