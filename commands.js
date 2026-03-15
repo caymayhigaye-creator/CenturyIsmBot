@@ -226,7 +226,7 @@ const commands = [
             try {
 
                 const verifiyEmbed = new EmbedBuilder()
-                .setTitle('Verify To Acces')
+                .setTitle('Verify To Access')
                 .setDescription('Click to get verified')
                 .setColor(0x0099ff)
                 .setFooter({
