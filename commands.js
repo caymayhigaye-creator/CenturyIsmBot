@@ -213,6 +213,22 @@ const commands = [
                 return;
             };
 
+            let ReactionData;
+            if (ExpressStorage.ReactionData) {
+                return(interaction.reply('Reaction data has already been initilized'));
+
+                setTimeout(() => {
+                    return(interaction.deleteReply());
+                }, 3000);
+            } else {
+                ExpressStorage.ReactionData = {};
+                ReactionData = ExpressStorage.ReactionData;
+                
+                ReactionData.ReactionEmoji = getReaction;
+                ReactionData.Channel = interaction.channel;
+                ReactionData.MessageId = null;
+            };
+
             try {
 
                 const verifiyEmbed = new EmbedBuilder()
@@ -230,6 +246,7 @@ const commands = [
                 const newMessage = await channel.send({
                     embeds: [verifiyEmbed],
                 });
+                ReactionData.MessageId = newMessage.id;
                 
                 await newMessage.react(getReaction);
 
