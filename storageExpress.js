@@ -16,6 +16,10 @@ app.listen(PORT, () => {
 app.delete('/centuryism', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
+
+    console.log(key)
+    
+    response.json('sa knk');
 });
 
 app.post('/centuryism', async (request, response) => {
