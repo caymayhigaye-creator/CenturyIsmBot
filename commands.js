@@ -193,6 +193,8 @@ const commands = [
         .setDescription('Create react accesing to the server!')
         .addStringOption(option => {
             option.setName('reaction')
+            option.setDescription('What kind emoji you want people to react and get verified')
+            option.setRequired(true)
         }).toJSON(),
 
         async execute() {
