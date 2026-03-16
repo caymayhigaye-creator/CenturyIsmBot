@@ -87,7 +87,6 @@ client.on(Events.ClientReady, async readyClient => {
 });
 
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
-    console.log(BotStorage)
     if (BotStorage.ReactionData) {
         if (!user.bot) {
             if (reaction.message.id === BotStorage.ReactionData.MessageId && reaction.emoji.name === BotStorage.ReactionData.ReactionEmoji) {
