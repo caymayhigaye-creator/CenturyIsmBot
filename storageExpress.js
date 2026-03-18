@@ -23,9 +23,10 @@ app.delete('/centuryism', async (request, response) => {
     if (!key || !placeId || !source) return(console.log('placeId or key not found!'));
 
     if (key == process.env.KEY) {
-        if (method && source == '' && method.toLowerCase() == 'stopproxy') {
+        if (method && method.toLowerCase() == 'stopproxy') {
             console.log('Delete succesfull');
             delete ExpressStorage.savedGames[placeId];
+            response.status(200).send('Succesfully Delete PlaceId from SavedGames!');
         } else {
             if (ExpressStorage.savedGames[placeId] && ExpressStorage.savedGames[placeId].executeds) {
                 const Filtered = ExpressStorage.savedGames[placeId].executeds.filter(obj => obj.Source !== source);
