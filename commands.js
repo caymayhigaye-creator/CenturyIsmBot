@@ -102,7 +102,7 @@ const commands = [
                     return(interaction.reply('make you sure you inputed the correct script & placeid'))
                 } else if (!ExpressStorage.savedGames[String(placeId)]) {
                     return(interaction.reply('The game is not found in backdoor saved games.'));
-                } else {return(interaction.reply('Something went wrong idk!'))};
+                }
 
             try {
 
@@ -125,14 +125,12 @@ const commands = [
                 const gameImagedata = await gameImageResponse.data.data[0];
                 const gameImageUrl = await gameImagedata.imageUrl ? gameImagedata.imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThxpwPKHBP41r-01lGuLh4YE2Q7rG4EUv13A&s.png'
 
-                if (ExpressStorage.savedGames[String(placeId)] && ExpressStorage.savedGames[String(placeId)].executedCommands) {
-                    ExpressStorage.savedGames[String(placeId)].executedCommands.push({
+                if (ExpressStorage.savedGames[String(placeId)] && ExpressStorage.savedGames[String(placeId)].executeds) {
+                    ExpressStorage.savedGames[String(placeId)].executeds.push({
                         placeId: placeId,
                         Source : scriptCode,
                     });
                 };
-
-                console.log(ExpressStorage.savedGames);
 
                 const Embed = new EmbedBuilder()
                 .setTitle(`# **ExecutingScript: ${scriptCode}**`)
