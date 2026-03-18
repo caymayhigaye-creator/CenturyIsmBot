@@ -149,7 +149,7 @@ const commands = [
                 };
 
                 const Embed = new EmbedBuilder()
-                .setTitle(`# **ExecutingScript:** \`\`\`lua\n` + `${scriptCode}\n` + `\`\`\``)
+                .setTitle(`**━━ ExecutingScript ━━**`)
                 .setColor(0x66ff00)
                 .setDescription(`# **${gameinfo.name}**`)
                 .setThumbnail(gameImageUrl)
@@ -179,6 +179,13 @@ const commands = [
                         `> **API Enabled:** ${(gameinfo.studioAccessToApisAllowed == true) ? '# **Yes**' : 'No'}\n`+
                         `> **Copying Allowed:** ${(gameinfo.copyingAllowed == true) ? '# **Yes**' : 'No'}`
                         , inline:true
+                    },
+                    {
+                        name: '**━━ Executed Script ━━**',
+                        value: `\`\`\`lua\n`+
+                        `${scriptCode}\n`+
+                        `\`\`\``
+                        , inline: false,
                     },
                     {
                         name: '**━━ Join Code ━━**',
