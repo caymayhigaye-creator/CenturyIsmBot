@@ -94,17 +94,15 @@ const commands = [
         AutoComplete: true,
         async AutoCompleteFunction(interaction) {
             const focusedValue = interaction.options.getFocused();
-            console.log(focusedValue);
-
             const choices = Object.keys(ExpressStorage.savedGames);
-
-            console.log(choices)
-            const filtered = choices.filter(choice => choice.includes(focusedValue));   
-
-            console.log(filtered)
-
+            const filtered = choices.filter(id => {
+                const gameData = ExpressStorage.savedGames[id];
+                return (
+                    id.includes(focusedValue) || gameData.gameName.toLowerCase().inclused(focusedValue)
+                );
+            });   
             await interaction.respond(
-                filtered.slice(0, 25).map(choice => ({name: choice, value:choice})),
+                filtered.slice(0, 25).map(choice => ({name: id, value:`${ExpressStorage.savedGames[id].gameName} (${id})`})),
             );
         },
 
