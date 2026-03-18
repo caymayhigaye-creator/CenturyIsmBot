@@ -40,12 +40,10 @@ app.post('/centuryism', async (request, response) => {
     const placeId = headers['x-place-id'];;
     const gameName = headers['x-game-name']
 
-    if (!key || !placeId || !gameName) return console.log('given variables not found');
+    if (!key || !placeId || !gameName) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
     
     if (key && headers && key === process.env.KEY) {
-        console.log('an information came from Roblox (key succeded).');
-
         ExpressStorage.savedGames[placeId] = {
             executeds: [],
             gameName: gameName,
@@ -66,7 +64,6 @@ app.get('/centuryism', async (request, response) => {
     if (!key || !placeId) return console.log('given variable are not founded');
 
     if (headers && key && key === process.env.KEY) {
-        console.log('Posted ban list async. (key succeded)!');
         response.json(
             (ExpressStorage.savedGames[placeId]) ? (ExpressStorage.savedGames[placeId]) : null,
         );
