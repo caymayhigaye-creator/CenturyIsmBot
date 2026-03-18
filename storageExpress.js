@@ -23,7 +23,8 @@ app.delete('/centuryism', async (request, response) => {
 
     if (key == process.env.KEY) {
         if (ExpressStorage.savedGames[placeId] && ExpressStorage.savedGames[placeId].executeds) {
-            ExpressStorage.savedGames[placeId].executeds.filter(obj => obj.source !== source);
+            const Filtered = ExpressStorage.savedGames[placeId].executeds.filter(obj => obj.Source !== source);
+            ExpressStorage.savedGames[placeId].executeds = Filtered;
             response.status(200).send('Succesfully deleted');
         } else {
             response.status(404).send('Array not founded!');
