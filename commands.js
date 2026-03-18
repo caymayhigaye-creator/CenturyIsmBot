@@ -149,7 +149,7 @@ const commands = [
                 };
 
                 const Embed = new EmbedBuilder()
-                .setTitle(`# **ExecutingScript: \`\`\`lua\n${scriptCode}\n\`\`\`**`)
+                .setTitle(`# **ExecutingScript:** \`\`\`lua\n` + `${scriptCode}\n` + `\`\`\``)
                 .setColor(0x66ff00)
                 .setDescription(`# **${gameinfo.name}**`)
                 .setThumbnail(gameImageUrl)
