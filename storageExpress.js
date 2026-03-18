@@ -25,6 +25,7 @@ app.delete('/centuryism', async (request, response) => {
     if (key == process.env.KEY) {
         if (method && method.toLowerCase() == 'stopproxy') {
             console.log('Delete succesfull');
+            console.log(ExpressStorage.savedGames)
             delete ExpressStorage.savedGames[placeId];
             response.status(200).send('Succesfully Delete PlaceId from SavedGames!');
         } else {
