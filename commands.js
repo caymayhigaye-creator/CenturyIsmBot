@@ -123,11 +123,11 @@ const commands = [
             try {
 
                 const gameinfoPromise = new Promise(async (callback, err) => {
-                    const universeresponse = await axios.get(`https://apis.roblox.com/universes/v1/places/80790491696418/universe`); // 6787156005
+                    const universeresponse = await axios.get(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`); // 6787156005
                     const universedata = await universeresponse.data;
                     const universeId = universedata && universedata.universeId ? universedata.universeId : null;
                     
-                    const gameinforesponse = await axios.get('https://games.roblox.com/v1/games?universeIds=6787156005');
+                    const gameinforesponse = await axios.get(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
                     const gameinfodata = await gameinforesponse.data.data[0];
                     
                     if (gameinfodata) {
@@ -149,7 +149,7 @@ const commands = [
                 };
 
                 const Embed = new EmbedBuilder()
-                .setTitle(`# **ExecutingScript: ${scriptCode}**`)
+                .setTitle(`# **ExecutingScript: \`\`\`lua\n${scriptCode}\n\`\`\`**`)
                 .setColor(0x66ff00)
                 .setDescription(`# **${gameinfo.name}**`)
                 .setThumbnail(gameImageUrl)
