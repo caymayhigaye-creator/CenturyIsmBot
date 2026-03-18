@@ -120,8 +120,6 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 });
 
 client.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-
     const command = commands.find(c => c.name === interaction.commandName);
     const accesCommandRole = interaction.guild.roles.cache.get(process.env.PERMISSIONED_ROLE_ID);
     const userPermission = interaction.member.roles.highest;
@@ -133,7 +131,7 @@ client.on(Events.InteractionCreate, async interaction => {
         }));
     };
 
-    if (command) {
+    if (command && interaction.isChatInputCommand()) {
         if (userPermission.position >= accesCommandRole.position) {
             return(await command.execute(interaction, client));
         } else {
@@ -141,6 +139,10 @@ client.on(Events.InteractionCreate, async interaction => {
                 content: 'You are not permissioned to use that command.',
                 ephemeral: true,
             }));
+        };
+    } else if (!interaction.isChatInputCommand() && command) {
+        if (command.AutoComplete && command.AutoCompleteFunction) {
+            await command.AutoCompleteFunction(interaction);
         };
     };
 });
