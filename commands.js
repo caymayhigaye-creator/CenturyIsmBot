@@ -107,11 +107,11 @@ const commands = [
             try {
 
                 const gameinfoPromise = new Promise(async (callback, err) => {
-                    const universeresponse = await axios.get(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`); // Universe id alma
+                    const universeresponse = await axios.get(`https://apis.roblox.com/universes/v1/places/80790491696418/universe`); // 6787156005
                     const universedata = await universeresponse.data;
                     const universeId = universedata && universedata.universeId ? universedata.universeId : null;
                     
-                    const gameinforesponse = await axios.get(`https://games.roblox.com/v1/games?universeIds=${universeId}`); // universe id ile info alma
+                    const gameinforesponse = await axios.get('https://games.roblox.com/v1/games?universeIds=6787156005');
                     const gameinfodata = await gameinforesponse.data.data[0];
                     
                     if (gameinfodata) {
