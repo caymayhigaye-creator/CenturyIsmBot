@@ -82,6 +82,7 @@ const commands = [
         .addStringOption(option => 
             option.setName('placeid')
             .setDescription('text placeid where you want to execute the code')
+            .setAutocomplete(true)
             .setRequired(true)
         )
         .addStringOption(option => 
@@ -89,6 +90,17 @@ const commands = [
             .setDescription('put here the script what you want to execute')
             .setRequired(true)
         ).toJSON(),
+
+        AutoComplete: true,
+        async AutoCompleteFunction(interaction) {
+            const focusedValue = interaction.options.getFocused();
+            const choices = Object.keys(ExpressStorage.savedGames);
+            const filtered = choices.filter(choice => choice.includes(focusedValue));   
+
+            await interaction.respond(
+                filtered.slice(0, 25).map(choice => ({name: choice, value:choice})),
+            );
+        },
 
         async execute() {
             const args = arguments;
