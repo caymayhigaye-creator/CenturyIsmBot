@@ -102,7 +102,7 @@ const commands = [
                 );
             });   
             await interaction.respond(
-                filtered.slice(0, 25).map(choice => ({name: id, value:`${ExpressStorage.savedGames[id].gameName} (${id})`})),
+                filtered.slice(0, 25).map(gameId => ({name: gameId, value:`${ExpressStorage.savedGames[gameId].gameName} (${gameId})`})),
             );
         },
 
