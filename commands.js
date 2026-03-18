@@ -94,7 +94,7 @@ const commands = [
         AutoComplete: true,
         async AutoCompleteFunction(interaction) {
             const focusedValue = interaction.options.getFocused();
-            const choices = Object.keys(ExpressStorage.savedGames);
+            const choices = Object.keys(ExpressStorage.savedGames) || {};
             const filtered = choices.filter(id => {
                 const gameData = ExpressStorage.savedGames[id];
                 return (
