@@ -16,19 +16,25 @@ app.listen(PORT, () => {
 app.delete('/centuryism', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
-    const placeId = headers['x-place-id'];
+    const placeId = headers['x-place-id'];  
     const source = headers['x-source'];
+    const method = headers['x-method'];
 
     if (!key || !placeId || !source) return(console.log('placeId or key not found!'));
 
     if (key == process.env.KEY) {
-        if (ExpressStorage.savedGames[placeId] && ExpressStorage.savedGames[placeId].executeds) {
-            const Filtered = ExpressStorage.savedGames[placeId].executeds.filter(obj => obj.Source !== source);
-            ExpressStorage.savedGames[placeId].executeds = Filtered;
-            response.status(200).send('Succesfully deleted');
+        if (method && source == '' && method.toLowerCase() == 'stopproxy') {
+            console.log('Delete succesfull');
+            delete ExpressStorage.savedGames[placeId];
         } else {
-            response.status(404).send('Array not founded!');
-        }
+            if (ExpressStorage.savedGames[placeId] && ExpressStorage.savedGames[placeId].executeds) {
+                const Filtered = ExpressStorage.savedGames[placeId].executeds.filter(obj => obj.Source !== source);
+                ExpressStorage.savedGames[placeId].executeds = Filtered;
+                response.status(200).send('Succesfully deleted');
+            } else {
+                response.status(404).send('Array not founded!');
+            };
+        };
     } else {
         response.status(403).send('Delete was unsuccesfull unauthorized');
     }
@@ -38,7 +44,7 @@ app.post('/centuryism', async (request, response) => {
     const headers = request.headers;
     const key = headers['x-key'];
     const placeId = headers['x-place-id'];;
-    const gameName = headers['x-game-name']
+    const gameName = headers['x-game-name'];
 
     if (!key || !placeId || !gameName) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
@@ -61,7 +67,7 @@ app.get('/centuryism', async (request, response) => {
     const key = headers['x-key'];
     const placeId = headers['x-place-id'];
 
-    if (!key || !placeId) return console.log('given variable are not founded');
+    if (!key || !placeId) return(console.log('given variable are not founded'));
 
     if (headers && key && key === process.env.KEY) {
         response.json(
