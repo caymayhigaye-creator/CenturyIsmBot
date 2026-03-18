@@ -98,11 +98,11 @@ const commands = [
             const filtered = choices.filter(id => {
                 const gameData = ExpressStorage.savedGames[id];
                 return (
-                    id.includes(focusedValue) || gameData.gameName.toLowerCase().inclused(focusedValue)
+                    id.includes(focusedValue) || gameData.gameName.toLowerCase().includes(focusedValue)
                 );
             });   
             await interaction.respond(
-                filtered.slice(0, 25).map(gameId => ({name: gameId, value:`${ExpressStorage.savedGames[gameId].gameName} (${gameId})`})),
+                filtered.slice(0, 25).map(gameId => ({name: `${ExpressStorage.savedGames[gameId].gameName} (${gameId})`, value:String(gameId)})),
             );
         },
 
