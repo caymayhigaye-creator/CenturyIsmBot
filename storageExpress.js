@@ -60,7 +60,7 @@ app.get('/centuryism', async (request, response) => {
     const key = headers['x-key'];
     const placeId = headers['x-place-id'];
 
-    if (!key || !get) return console.log('given variable are not founded');
+    if (!key || !placeId) return console.log('given variable are not founded');
 
     if (headers && key && key === process.env.KEY) {
         console.log('Posted ban list async. (key succeded)!');
