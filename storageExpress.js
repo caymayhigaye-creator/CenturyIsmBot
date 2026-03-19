@@ -44,8 +44,9 @@ app.delete('/centuryism', async (request, response) => {
 app.post('/centuryism', async (request, response) => {
     const rawString = Object.keys(request.body);
     if (!rawString) return(response.status(400).send('Empty response!'));
-    
+
     const parsedData = JSON.parse(rawString);
+    console.log(parsedData, request.body)
     const {KEY, GAME_INFO} = parsedData;
     const placeId = GAME_INFO.PLACE_ID;
     const gameName = GAME_INFO.GAME_NAME;
