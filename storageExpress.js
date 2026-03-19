@@ -42,16 +42,16 @@ app.delete('/centuryism', async (request, response) => {
 
 app.post('/centuryism', async (request, response) => {
     const body = request.body;
-    const key = body['x-key'];
-    const placeId = body['x-place-id'];
-    const gameName = body['x-game-name'];
+    const {KEY, GAME_INFO} = body;
+    const gameName = GAME_INFO.GAME_NAME;
+    const placeId = GAME_INFO.PLACE_ID;
 
-    console.log(gameName);
+    console.log(KEY);
 
-    if (!key || !placeId || !gameName) return(console.log('given variables not found'));
+    if (!KEY || !placeId || !gameName) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
     
-    if (key && key === process.env.KEY) {
+    if (KEY && KEY === process.env.KEY) {
         ExpressStorage.savedGames[placeId] = {
             executeds: [],
             gameName: gameName,
