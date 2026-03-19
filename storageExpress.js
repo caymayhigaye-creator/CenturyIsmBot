@@ -46,6 +46,8 @@ app.post('/centuryism', async (request, response) => {
     const placeId = body['x-place-id'];
     const gameName = body['x-game-name'];
 
+    console.log(gameName);
+
     if (!key || !placeId || !gameName) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
     
