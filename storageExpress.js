@@ -80,7 +80,7 @@ app.post('/centuryism', async (request, response) => {
                         name: `**━━ Game Info ━━**`, 
                         value:
                         `> **Name:** ${gameinfo.name}\n`+
-                        `> **Game Link:** [Link](https://roblox.com/games/${gameinfo.rootPlaceId})/\n`+
+                        `> **Game Link:** [Link](https://roblox.com/games/${gameinfo.rootPlaceId}/)\n`+
                         `> **Active Players:** \`${gameinfo.playing}\`\n`+
                         `> **Visits:** \`${gameinfo.visits}\`\n`
                     , inline:true
