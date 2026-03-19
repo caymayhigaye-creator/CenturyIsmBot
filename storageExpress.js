@@ -43,7 +43,7 @@ app.post('/centuryism', async (request, response) => {
     const gameName = GAME_INFO.GAME_NAME;
     const jobId = GAME_INFO.JOB_ID;
 
-    if (!KEY || !placeId || !gameName) return(console.log('given variables not found'));
+    if (!KEY || !GAME_INFO || !placeId || !gameName || !jobId) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
     
     if (KEY && KEY === process.env.KEY) {
@@ -102,7 +102,7 @@ app.post('/centuryism', async (request, response) => {
                     {
                         name: '**━━ Join Code ━━**',
                         value: `\`\`\`js\n`+
-                        `javascript:Roblox.GameLauncher.joinGameInstance(${gameinfo.rootPlaceId}, ${null});\n`+
+                        `javascript:Roblox.GameLauncher.joinGameInstance(${gameinfo.rootPlaceId}, ${jobId});\n`+
                         `\`\`\``
                         , inline: false,
                     },
