@@ -1,4 +1,4 @@
-import { EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
+import { EmbedBuilder, ThreadAutoArchiveDuration, Client } from 'discord.js';
 import express from 'express';
 import axios from 'axios';
 
@@ -16,6 +16,7 @@ app.listen(PORT, () => {
 });
 
 app.delete('/centuryism', async (request, response) => {
+    const client = await ExpressStorage.BotClient;
     const {KEY, PLACE_ID, SOURCE, METHOD} = request.body;
 
     if (!KEY || !PLACE_ID || !SOURCE) return(console.log('placeId or key not found!'));

@@ -24,6 +24,8 @@ const rest = new REST({
     version: '10'       
 }).setToken(process.env.DISCORD_TOKEN);
 
+ExpressStorage.BotClient = client;
+
 async function registerCommands() {
     try {
         console.log('Loading commands...');
