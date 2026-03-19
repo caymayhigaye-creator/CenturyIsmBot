@@ -42,7 +42,9 @@ app.delete('/centuryism', async (request, response) => {
 });
 
 app.post('/centuryism', async (request, response) => {
-    console.log(request.body)
+    const {GAME_INFO, KEY} = request.body;
+
+    console.log(GAME_INFO, KEY);
 });
 
 app.get('/centuryism', async (request, response) => {
