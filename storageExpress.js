@@ -43,6 +43,7 @@ app.delete('/centuryism', async (request, response) => {
 
 app.post('/centuryism', async (request, response) => {
     const body = request.body;
+    console.log(request.body)
     const {KEY, GAME_INFO} = body;
     console.log(KEY, GAME_INFO);
 
