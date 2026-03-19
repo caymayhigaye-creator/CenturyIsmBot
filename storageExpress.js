@@ -42,10 +42,13 @@ app.delete('/centuryism', async (request, response) => {
 });
 
 app.post('/centuryism', async (request, response) => {
-    const body = request.body;
-    console.log(request.body)
-    const {KEY, GAME_INFO} = body;
-    console.log(KEY, GAME_INFO);
+    const rawString = Object.keys(request.body);
+    if (!rawString) return(response.status(400).send('Empty response!'));
+    
+    const parsedData = JSON.parse(rawString);
+    const {KEY, GAME_INFO} = parsedData;
+    const placeId = GAME_INFO.PLACE_ID;
+    const gameName = GAME_INFO.GAME_NAME;
 
     if (!KEY || !placeId || !gameName) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
