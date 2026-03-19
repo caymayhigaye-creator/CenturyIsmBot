@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events, InteractionCollector} from "discord.js";
 import mongoose, { Mongoose } from "mongoose";
 import axios from 'axios';
 import { ExpressStorage } from './storageExpress.js';
@@ -246,7 +246,7 @@ const commands = [
 
             try {
 
-                const verifiyEmbed = new EmbedBuilder()
+                const verifyEmbed = new EmbedBuilder()
                 .setTitle('Verify To Access')
                 .setDescription('Click to get verified')
                 .setColor(0x0099ff)
@@ -267,7 +267,7 @@ const commands = [
                 ReactionData.ReactionEmoji = getReaction;
                 ReactionData.Channel = interaction.channel;
                 ReactionData.MessageId = newMessage.id;
-                ReactionData.GuildId = 
+                ReactionData.GuildId = interaction.guildId;
 
                 await ReactionModel.findOneAndUpdate(
                     {guildId: interaction.guildId},
@@ -298,6 +298,33 @@ const commands = [
             };
         },
     },
+    {
+        name: 'clear',
+
+        data : new SlashCommandBuilder()
+            .setName('clear')
+            .setDescription('Clears the messages in the channel with given number range.')
+            .addNumberOption(input => 
+                input.setName('range')
+                .setDescription('Put number how many messages you wanna delete in the channel.')
+                .setRequired(true)
+            )
+            .toJSON(),
+
+        async execute(interaction, client) {
+            const range = interaction.options.getNumber('range');
+
+            if(!range) return(interaction.reply({content: 'Make you sure putted the range number in it.', ephemeral: true}));
+
+            try {
+                const channel = await interaction.channel;
+                await channel.bulkDelete(range, true);
+                return(interaction.reply({content: 'Succesfully deleted messages', ephemeral:true}));
+            } catch(e) {
+                return(interaction.reply({content: e.message, ephemeral:true}));
+            };
+        }
+    }
 ];
 
 export default commands;
