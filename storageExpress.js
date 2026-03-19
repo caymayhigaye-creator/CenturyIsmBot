@@ -1,4 +1,4 @@
-import { ThreadAutoArchiveDuration } from 'discord.js';
+import { EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
 import express from 'express';
 
 const app = express();
@@ -41,14 +41,85 @@ app.post('/centuryism', async (request, response) => {
     const {GAME_INFO, KEY} = request.body;
     const placeId = GAME_INFO.PLACE_ID;
     const gameName = GAME_INFO.GAME_NAME;
+    const jobId = GAME_INFO.JOB_ID;
 
     if (!KEY || !placeId || !gameName) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
     
     if (KEY && KEY === process.env.KEY) {
+        const gameinfoPromise = new Promise(async (callback, err) => {
+            const universeresponse = await axios.get(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
+            const universedata = await universeresponse.data;
+            const universeId = universedata && universedata.universeId ? universedata.universeId : null;
+            
+            const gameinforesponse = await axios.get(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
+            const gameinfodata = await gameinforesponse.data.data[0];
+            
+            if (gameinfodata) {
+                return(callback(gameinfodata));
+            } else {
+                return(err('game info data not found.'))
+            }
+        });
+
+        const gameinfo = await gameinfoPromise;
+        const gameImageResponse = await axios.get(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${gameinfo.id}&size=150x150&format=Png&isCircular=false`);
+        const gameImagedata = await gameImageResponse.data.data[0];
+        const gameImageUrl = await gameImagedata.imageUrl ? gameImagedata.imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThxpwPKHBP41r-01lGuLh4YE2Q7rG4EUv13A&s.png'
+
+        const Embed = new EmbedBuilder()
+            .setTitle(`**━━ Game Is Detected ━━**`)
+            .setColor(0x66ff00)
+            .setDescription(`# **${gameinfo.name}**`)
+            .setThumbnail(gameImageUrl)
+            .addFields([
+                {   
+                    name: `**━━ Game Info ━━**`, 
+                    value:
+                    `> **Name:** ${gameinfo.name}\n`+
+                    `> **Game Link:** [Link](https://roblox.com/games/${gameinfo.rootPlaceId})/\n`+
+                    `> **Active Players:** \`${gameinfo.playing}\`\n`+
+                    `> **Visits:** \`${gameinfo.visits}\`\n`
+                , inline:true
+                },
+                {
+                    name: '**━━ Owner Info ━━**', 
+                    value: 
+                    `> **Creator Name:** \`${gameinfo.creator.name}\`\n`+ 
+                    `> **Creator Id:** \`${gameinfo.creator.id}\`\n`+
+                    `> **Creator Link:** [Link](https://roblox.com/users/${gameinfo.creator.id}/profile)\n`+
+                    `> **Verified: **${(gameinfo.creator.hasVerifiedBadge === true) ? '# **Yes**' : 'No'}`
+                    , inline:true
+                },
+                {
+                    name: '**━━ Settings ━━**',
+                    value:
+                    `> **AvatarRigType:** ${(gameinfo.universeAvatarType == 'MorphToR15') ? 'R15' : 'R6'}\n`+
+                    `> **API Enabled:** ${(gameinfo.studioAccessToApisAllowed == true) ? '# **Yes**' : 'No'}\n`+
+                    `> **Copying Allowed:** ${(gameinfo.copyingAllowed == true) ? '# **Yes**' : 'No'}`
+                     , inline:true
+                    },
+                    {
+                        name: '**━━ Join Code ━━**',
+                        value: `\`\`\`js\n`+
+                        `javascript:Roblox.GameLauncher.joinGameInstance(${gameinfo.rootPlaceId}, ${null});\n`+
+                        `\`\`\``
+                        , inline: false,
+                    },
+                    
+                ])
+                .setTimestamp(new Date())
+                .setFooter({text: 'Game Has Detected'});    
+        
+        const channel = await client.channels.cache.get(process.env.GAME_NOTIFY_CHANNEL);
+        const newMessage = channel.send({
+            embeds: [Embed],
+        });
+
         ExpressStorage.savedGames[placeId] = {
             executeds: [],
             gameName: gameName,
+            MessageId: newMessage.id,
         };
 
         response.status(200).send('info claimed');
