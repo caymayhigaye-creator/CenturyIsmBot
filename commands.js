@@ -302,14 +302,14 @@ const commands = [
         name: 'clear',
 
         data : new SlashCommandBuilder()
-            .setName('clear')
-            .setDescription('Clears the messages in the channel with given number range.')
-            .addNumberOption(input => 
-                input.setName('range')
-                .setDescription('Put number how many messages you wanna delete in the channel.')
-                .setRequired(true)
-            )
-            .toJSON(),
+        .setName('clear')
+        .setDescription('Clears the messages in the channel with given number range.')
+        .addNumberOption(input => 
+            input.setName('range')
+            .setDescription('Put number how many messages you wanna delete in the channel.')
+            .setRequired(true)
+        )
+        .toJSON(),
 
         async execute(interaction, client) {
             const range = interaction.options.getNumber('range');
