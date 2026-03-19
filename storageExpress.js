@@ -16,7 +16,6 @@ app.listen(PORT, () => {
 });
 
 app.delete('/centuryism', async (request, response) => {
-    const client = await ExpressStorage.BotClient;
     const {KEY, PLACE_ID, SOURCE, METHOD} = request.body;
 
     if (!KEY || !PLACE_ID || !SOURCE) return(console.log('placeId or key not found!'));
@@ -40,6 +39,7 @@ app.delete('/centuryism', async (request, response) => {
 });
 
 app.post('/centuryism', async (request, response) => {
+    const client = await ExpressStorage.BotClient;
     const {GAME_INFO, KEY} = request.body;
     const placeId = GAME_INFO.PLACE_ID;
     const gameName = GAME_INFO.GAME_NAME;
