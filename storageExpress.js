@@ -14,11 +14,11 @@ app.listen(PORT, () => {
 });
 
 app.delete('/centuryism', async (request, response) => {
-    const headers = request.headers;
-    const key = headers['x-key'];
-    const placeId = headers['x-place-id'];  
-    const source = headers['x-source'];
-    const method = headers['x-method'];
+    const body = request.body;
+    const key = body['x-key'];
+    const placeId = body['x-place-id'];  
+    const source = body['x-source'];
+    const method = body['x-method'];
 
     if (!key || !placeId || !source) return(console.log('placeId or key not found!'));
 
@@ -41,11 +41,10 @@ app.delete('/centuryism', async (request, response) => {
 });
 
 app.post('/centuryism', async (request, response) => {
-    const headers = request.headers;
     const body = request.body;
-    const key = headers['x-key'];
-    const placeId = headers['x-place-id'];
-    const gameInfo = body['x-game-info'];
+    const key = body['x-key'];
+    const placeId = body['x-place-id'];
+    const gameInfo = body['x-game-name'];
 
     if (!key || !placeId || !gameInfo) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
@@ -66,9 +65,9 @@ app.post('/centuryism', async (request, response) => {
 });
 
 app.get('/centuryism', async (request, response) => {
-    const headers = request.headers;
-    const key = headers['x-key'];
-    const placeId = headers['x-place-id'];
+    const body = request.body;
+    const key = body['x-key'];
+    const placeId = body['x-place-id'];
 
     if (!key || !placeId) return(console.log('given variable are not founded'));
 
