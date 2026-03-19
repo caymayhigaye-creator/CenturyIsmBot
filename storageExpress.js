@@ -44,15 +44,15 @@ app.post('/centuryism', async (request, response) => {
     const body = request.body;
     const key = body['x-key'];
     const placeId = body['x-place-id'];
-    const gameInfo = body['x-game-name'];
+    const gameName = body['x-game-name'];
 
-    if (!key || !placeId || !gameInfo) return(console.log('given variables not found'));
+    if (!key || !placeId || !gameName) return(console.log('given variables not found'));
     if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
     
-    if (key && headers && key === process.env.KEY) {
+    if (key && key === process.env.KEY) {
         ExpressStorage.savedGames[placeId] = {
             executeds: [],
-            gameName: gameInfo.Name,
+            gameName: gameName,
         };
 
         console.log(ExpressStorage.savedGames)
