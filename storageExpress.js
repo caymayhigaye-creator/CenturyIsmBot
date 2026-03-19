@@ -59,7 +59,9 @@ app.post('/centuryism', async (request, response) => {
 });
 
 app.get('/centuryism', async (request, response) => {
-    const {KEY, PLACE_ID} = request.query;
+    const headers = request.headers;
+    const KEY = headers['x-key'];
+    const PLACE_ID = headers['x-place-id'];
 
     if (!KEY || !PLACE_ID) return(console.log('given variable are not founded'));
 
