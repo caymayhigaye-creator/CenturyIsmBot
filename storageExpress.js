@@ -194,6 +194,8 @@ app.post('/centuryism', async (request, response) => {
                 message = undefined;
             };
 
+            console.log(message);
+
             if(!message || message === undefined) {
                 message = await channel.send({
                     embeds: [Embed],
@@ -203,7 +205,9 @@ app.post('/centuryism', async (request, response) => {
                 await message.edit({
                     embeds: [Embed]
                 });
-            };
+            }; 
+
+            console.log(message);
 
             ExpressStorage.savedGames[placeId] = {
                 executeds: [],
