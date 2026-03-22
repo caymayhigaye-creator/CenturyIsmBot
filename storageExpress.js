@@ -132,6 +132,8 @@ app.post('/centuryism', async (request, response) => {
                 const message = channel.messages.fetch(messageid);
                 if (!message) return(console.log('message not founded'));
 
+                console.log(message);
+
                 message.edit({
                     embeds: [Embed],
                 });
