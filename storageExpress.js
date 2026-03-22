@@ -23,11 +23,11 @@ app.delete('/centuryism', async (request, response) => {
 
     if (KEY == process.env.KEY) {
         if (METHOD && METHOD.toLowerCase() == 'stopproxy') {
-            if (!ExpressStorage.GamesCache[PLACE_ID]) {
-                ExpressStorage.GamesCache[PLACE_ID] = {
-                    MessageId: ExpressStorage.savedGames[PLACE_ID].MessageId,
-                };
-            };
+            // if (!ExpressStorage.GamesCache[PLACE_ID]) {
+            //     ExpressStorage.GamesCache[PLACE_ID] = {
+            //         MessageId: ExpressStorage.savedGames[PLACE_ID].MessageId,
+            //     };
+            // };
             delete ExpressStorage.savedGames[PLACE_ID];
             response.status(200).send('Succesfully Delete PlaceId from SavedGames!');
         } else {
@@ -131,7 +131,7 @@ app.post('/centuryism', async (request, response) => {
                 const messageid = ExpressStorage.savedGames[placeId].MessageId || ExpressStorage.GamesCache[placeId].MessageId;
                 const message = await channel.messages.fetch(messageid);
                 if (!message) return(console.log('message not founded'));
-                
+
                 await message.edit({
                     embeds: [Embed],
                 });
@@ -182,14 +182,23 @@ app.post('/centuryism', async (request, response) => {
                 .setTimestamp(new Date());
             };
 
-            let message = ExpressStorage.GamesCache[placeId] && await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) ? 
-            await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) : undefined;
+            let message;
+
+            try {
+                const oldMessageId = ExpressStorage.GamesCache[placeId].MessageId ? ExpressStorage.GamesCache[placeId].MessageId : undefined;
+
+                if (oldMessageId) {
+                    message = channel.messages.fetch(oldMessageId);
+                };
+            } catch {
+                message = undefined;
+            };
 
             if(!message || message === undefined) {
                 message = await channel.send({
                     embeds: [Embed],
                 });
-            } else {
+            } else if (message && message.editable) {
                 Embed.setFooter({text: 'Game Has Detected (Updated)'});
                 await message.edit({
                     embeds: [Embed]
@@ -199,6 +208,10 @@ app.post('/centuryism', async (request, response) => {
             ExpressStorage.savedGames[placeId] = {
                 executeds: [],
                 gameName: gameName,
+                MessageId: message.id,
+            };
+
+            ExpressStorage.GamesCache[placeId] = {
                 MessageId: message.id,
             };
 
