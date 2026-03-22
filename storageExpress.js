@@ -216,9 +216,9 @@ app.post('/centuryism', async (request, response) => {
             };
 
             const reply = await message.reply('<@&1482776837909385366>');
-            setTimeout(() => {
-                reply.delete();
-            }, 3000);
+            // setTimeout(() => {
+            //     reply.delete();
+            // }, 3000);
 
             response.status(200).send('info claimed');
         } else {
