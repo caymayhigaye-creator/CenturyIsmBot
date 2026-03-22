@@ -44,6 +44,9 @@ app.post('/centuryism', async (request, response) => {
     const placeId = GAME_INFO.PLACE_ID;
     const gameName = GAME_INFO.GAME_NAME;
     const jobId = GAME_INFO.JOB_ID;
+    const PLAYERS = GAME_INFO.PLAYERS;
+
+    console.log(PLAYERS);
 
     try {
         if (!KEY || !GAME_INFO || !placeId || !gameName || !jobId) return(console.log('given variables not found', KEY, GAME_INFO, placeId, gameName, jobId));
@@ -109,7 +112,6 @@ app.post('/centuryism', async (request, response) => {
                             `\`\`\``
                             , inline: false,
                         },
-                        
                     ])
                     .setTimestamp(new Date())
                     .setFooter({text: 'Game Has Detected'});    
