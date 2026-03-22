@@ -48,7 +48,6 @@ app.post('/centuryism', async (request, response) => {
 
     try {
         if (!KEY || !GAME_INFO || !placeId || !gameName || !jobId) return(console.log('given variables not found', KEY, GAME_INFO, placeId, gameName, jobId));
-        if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
         
         if (KEY && KEY === process.env.KEY) {
             const gameinfoPromise = new Promise(async (callback, err) => {
@@ -76,7 +75,11 @@ app.post('/centuryism', async (request, response) => {
                 .setColor(0x66ff00)
                 .setDescription(`# **${gameinfo.name}**`)
                 .setThumbnail(gameImageUrl)
-                .addFields([
+            
+            const channel = await client.channels.fetch(process.env.GAME_NOTIFY_CHANNEL);
+            
+            if (ExpressStorage.savedGames[placeId]) {
+                Embed.addFields([
                     {   
                         name: `**━━ Game Info ━━**`, 
                         value:
@@ -116,10 +119,63 @@ app.post('/centuryism', async (request, response) => {
                             , inline: false,
                         },
                     ])
-                    .setTimestamp(new Date())
-                    .setFooter({text: 'Game Has Detected'});    
-            
-            const channel = await client.channels.cache.get(process.env.GAME_NOTIFY_CHANNEL);
+                    .setFooter({text: 'Game Has Detected (Updated)'})
+                    .setTimestamp(new Date());
+                
+                const messageid = ExpressStorage.savedGames[placeId].MessageId;
+                const message = channel.messages.fetch(messageid);
+                if (!message) return(console.log('message not founded'));
+
+                message.edit({
+                    embeds: [Embed],
+                });
+                
+                return(console.log('Already saved data of the game'))
+            } else {
+                Embed.addFields([
+                    {   
+                        name: `**━━ Game Info ━━**`, 
+                        value:
+                        `> **Name:** ${gameinfo.name}\n`+
+                        `> **Game Link:** [Link](https://roblox.com/games/${gameinfo.rootPlaceId}/)\n`+
+                        `> **Active Players:** \`${gameinfo.playing}\`\n`+
+                        `> **Visits:** \`${gameinfo.visits}\`\n`
+                    , inline:true
+                    },
+                    {
+                        name: '**━━ Owner Info ━━**', 
+                        value: 
+                        `> **Creator Name:** \`${gameinfo.creator.name}\`\n`+ 
+                        `> **Creator Id:** \`${gameinfo.creator.id}\`\n`+
+                        `> **Creator Link:** [Link](https://roblox.com/users/${gameinfo.creator.id}/profile)\n`+
+                        `> **Verified: **${(gameinfo.creator.hasVerifiedBadge === true) ? '# **Yes**' : 'No'}`
+                        , inline:true
+                    },
+                    {
+                        name: '**━━ Settings ━━**',
+                        value:
+                        `> **AvatarRigType:** ${(gameinfo.universeAvatarType == 'MorphToR15') ? 'R15' : 'R6'}\n`+
+                        `> **API Enabled:** ${(gameinfo.studioAccessToApisAllowed == true) ? '# **Yes**' : 'No'}\n`+
+                        `> **Copying Allowed:** ${(gameinfo.copyingAllowed == true) ? '# **Yes**' : 'No'}`
+                        , inline:true
+                        },
+                        {
+                            name: '**━━ PLAYERS ━━**',
+                            value: PLAYERS.map(__user => `> **\`${__user}\`**`).join('\n')
+                            , inline: false,
+                        },
+                        {
+                            name: '**━━ Join Code ━━**',
+                            value: `\`\`\`js\n`+
+                            `javascript:Roblox.GameLauncher.joinGameInstance(${gameinfo.rootPlaceId}, ${jobId});\n`+
+                            `\`\`\``
+                            , inline: false,
+                        },
+                    ])
+                .setFooter({text: 'Game Has Detected'})
+                .setTimestamp(new Date());
+            };
+
             const newMessage = channel.send({
                 embeds: [Embed],
             });
