@@ -8,6 +8,7 @@ app.use(express.urlencoded({extended: true}));
 
 const ExpressStorage = {
     savedGames: {},
+    GamesCache: {},
 };
 
 const PORT = process.env.PORT || 3000;
@@ -22,6 +23,11 @@ app.delete('/centuryism', async (request, response) => {
 
     if (KEY == process.env.KEY) {
         if (METHOD && METHOD.toLowerCase() == 'stopproxy') {
+            if (!ExpressStorage.GamesCache[PLACE_ID]) {
+                ExpressStorage.GamesCache[PLACE_ID] = {
+                    MessageId: ExpressStorage.savedGames[PLACE_ID].MessageId,
+                };
+            };
             delete ExpressStorage.savedGames[PLACE_ID];
             response.status(200).send('Succesfully Delete PlaceId from SavedGames!');
         } else {
@@ -122,7 +128,7 @@ app.post('/centuryism', async (request, response) => {
                     .setFooter({text: 'Game Has Detected (Updated)'})
                     .setTimestamp(new Date());
                 
-                const messageid = ExpressStorage.savedGames[placeId].MessageId;
+                const messageid = ExpressStorage.savedGames[placeId].MessageId || ExpressStorage.GamesCache[placeId].MessageId;
                 const message = channel.messages.fetch(messageid);
                 if (!message) return(console.log('message not founded'));
 
@@ -176,7 +182,7 @@ app.post('/centuryism', async (request, response) => {
                 .setTimestamp(new Date());
             };
 
-            const newMessage = channel.send({
+            const newMessage = ExpressStorage.GamesCache[placeId] ? channel.messages.fetch(ExpressStorage.GamesCache[placeId]) : channel.send({
                 embeds: [Embed],
             });
 
