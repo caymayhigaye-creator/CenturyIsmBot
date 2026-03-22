@@ -184,14 +184,22 @@ app.post('/centuryism', async (request, response) => {
                 .setTimestamp(new Date());
             };
 
-            const newMessage = ExpressStorage.GamesCache[placeId] ? channel.messages.fetch(ExpressStorage.GamesCache[placeId]) : channel.send({
-                embeds: [Embed],
-            });
+            let message = ExpressStorage.GamesCache[placeId] ? channel.messages.fetch(ExpressStorage.GamesCache[placeId]) : undefined
+
+            if(!message || message === undefined) {
+                message = channel.send({
+                    embeds: [Embed],
+                });
+            } else {
+                message.edit({
+                    embeds: [Embed]
+                });
+            };
 
             ExpressStorage.savedGames[placeId] = {
                 executeds: [],
                 gameName: gameName,
-                MessageId: newMessage.id,
+                MessageId: message.id,
             };
 
             response.status(200).send('info claimed');
