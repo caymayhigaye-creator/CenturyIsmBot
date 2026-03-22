@@ -46,8 +46,6 @@ app.post('/centuryism', async (request, response) => {
     const jobId = GAME_INFO.JOB_ID;
     const PLAYERS = GAME_INFO.PLAYERS;
 
-    console.log(PLAYERS);
-
     try {
         if (!KEY || !GAME_INFO || !placeId || !gameName || !jobId) return(console.log('given variables not found', KEY, GAME_INFO, placeId, gameName, jobId));
         if (ExpressStorage[placeId]) return(console.log('Already saved data of the game'));
@@ -104,6 +102,11 @@ app.post('/centuryism', async (request, response) => {
                         `> **API Enabled:** ${(gameinfo.studioAccessToApisAllowed == true) ? '# **Yes**' : 'No'}\n`+
                         `> **Copying Allowed:** ${(gameinfo.copyingAllowed == true) ? '# **Yes**' : 'No'}`
                         , inline:true
+                        },
+                        {
+                            name: '**━━ PLAYERS ━━**',
+                            value: PLAYERS.map(__user => `${__user}`).join('\n')
+                            , inline: false,
                         },
                         {
                             name: '**━━ Join Code ━━**',
