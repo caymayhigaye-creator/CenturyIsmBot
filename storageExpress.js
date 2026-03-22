@@ -129,7 +129,7 @@ app.post('/centuryism', async (request, response) => {
                     .setTimestamp(new Date());
                 
                 const messageid = ExpressStorage.savedGames[placeId].MessageId || ExpressStorage.GamesCache[placeId].MessageId;
-                const message = channel.messages.fetch(messageid);
+                const message = await channel.messages.fetch(messageid);
                 if (!message) return(console.log('message not founded'));
 
                 console.log(message);
@@ -184,15 +184,15 @@ app.post('/centuryism', async (request, response) => {
                 .setTimestamp(new Date());
             };
 
-            let message = ExpressStorage.GamesCache[placeId] ? channel.messages.fetch(ExpressStorage.GamesCache[placeId]) : undefined
+            let message = await ExpressStorage.GamesCache[placeId] ? channel.messages.fetch(ExpressStorage.GamesCache[placeId]) : undefined
 
             if(!message || message === undefined) {
-                message = channel.send({
+                message = await channel.send({
                     embeds: [Embed],
                 });
             } else {
                 console.log(message)
-                message.edit({
+                await message.edit({
                     embeds: [Embed]
                 });
             };
