@@ -188,7 +188,7 @@ app.post('/centuryism', async (request, response) => {
                 const oldMessageId = ExpressStorage.GamesCache[placeId].MessageId ? ExpressStorage.GamesCache[placeId].MessageId : undefined;
 
                 if (oldMessageId) {
-                    message = channel.messages.fetch(oldMessageId);
+                    message = await channel.messages.fetch(oldMessageId);
                 };
             } catch {
                 message = undefined;
