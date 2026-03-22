@@ -82,7 +82,7 @@ app.post('/centuryism', async (request, response) => {
                 .setDescription(`# **${gameinfo.name}**`)
                 .setThumbnail(gameImageUrl)
             
-            const channel = await client.channels.fetch(process.env.GAME_NOTIFY_CHANNEL);
+            const channel = await client.channels.cache.get(process.env.GAME_NOTIFY_CHANNEL);
             
             if (ExpressStorage.savedGames[placeId]) {
                 Embed.addFields([
@@ -184,7 +184,7 @@ app.post('/centuryism', async (request, response) => {
                 .setTimestamp(new Date());
             };
 
-            let message = await ExpressStorage.GamesCache[placeId] ? channel.messages.fetch(ExpressStorage.GamesCache[placeId]) : undefined
+            let message = await ExpressStorage.GamesCache[placeId] ? channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) : undefined
 
             if(!message || message === undefined) {
                 message = await channel.send({
