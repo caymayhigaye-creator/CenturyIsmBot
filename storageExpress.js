@@ -132,7 +132,7 @@ app.post('/centuryism', async (request, response) => {
                 const message = await channel.messages.fetch(messageid);
                 if (!message) return(console.log('message not founded'));
 
-                console.log(message);
+                console.log(await message);
 
                 await message.edit({
                     embeds: [Embed],
@@ -191,7 +191,7 @@ app.post('/centuryism', async (request, response) => {
                     embeds: [Embed],
                 });
             } else {
-                console.log(message)
+                console.log(await message)
                 await message.edit({
                     embeds: [Embed]
                 });

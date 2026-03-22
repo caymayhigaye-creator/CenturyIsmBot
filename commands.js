@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events, InteractionCollector} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events, InteractionCollector, MessageFlags} from "discord.js";
 import mongoose, { Mongoose } from "mongoose";
 import axios from 'axios';
 import { ExpressStorage } from './storageExpress.js';
@@ -321,7 +321,7 @@ const commands = [
                 await channel.bulkDelete(range, true);
                 return(interaction.reply({content: 'Succesfully deleted messages', ephemeral:true}));
             } catch(e) {
-                return(interaction.reply({content: e.message, ephemeral:true}));
+                return(interaction.reply({content: e.message, flags: [MessageFlags.Ephemeral]}));
             };
         }
     }
