@@ -191,6 +191,7 @@ app.post('/centuryism', async (request, response) => {
                     embeds: [Embed],
                 });
             } else {
+                console.log(message)
                 message.edit({
                     embeds: [Embed]
                 });
