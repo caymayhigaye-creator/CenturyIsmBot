@@ -131,9 +131,7 @@ app.post('/centuryism', async (request, response) => {
                 const messageid = ExpressStorage.savedGames[placeId].MessageId || ExpressStorage.GamesCache[placeId].MessageId;
                 const message = await channel.messages.fetch(messageid);
                 if (!message) return(console.log('message not founded'));
-
-                console.log(await message);
-
+                
                 await message.edit({
                     embeds: [Embed],
                 });
@@ -185,14 +183,14 @@ app.post('/centuryism', async (request, response) => {
             };
 
             let message = ExpressStorage.GamesCache[placeId] && await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) ? 
-            await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) : undefined
+            await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) : undefined;
 
             if(!message || message === undefined) {
                 message = await channel.send({
                     embeds: [Embed],
                 });
             } else {
-                console.log(typeof ExpressStorage.GamesCache[placeId].MessageId)
+                Embed.setFooter({text: 'Game Has Detected (Updated)'});
                 await message.edit({
                     embeds: [Embed]
                 });
