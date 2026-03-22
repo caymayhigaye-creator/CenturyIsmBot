@@ -215,10 +215,10 @@ app.post('/centuryism', async (request, response) => {
                 MessageId: message.id,
             };
 
-            await message.reply('<@&1482776837909385366>');
-            setTimeout(() => {
-                message.deleteReply();
-            }, 3000);
+            // await message.reply('<@&1482776837909385366>');
+            // setTimeout(() => {
+            //     message.deleteReply();
+            // }, 3000);
 
             response.status(200).send('info claimed');
         } else {
