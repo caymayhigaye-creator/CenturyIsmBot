@@ -217,6 +217,7 @@ app.post('/centuryism', async (request, response) => {
 
             const reply = await message.reply('<@&1482776837909385366>');
             setTimeout(() => {
+                console.log('deleting reply')
                 reply.delete();
             }, 3000);
 

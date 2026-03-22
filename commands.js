@@ -319,7 +319,7 @@ const commands = [
             try {
                 const channel = await interaction.channel;
                 await channel.bulkDelete(range, true);
-                return(interaction.reply({content: 'Succesfully deleted messages', ephemeral:true}));
+                return(interaction.reply({content: 'Succesfully deleted messages', flags: [MessageFlags.Ephemeral]}));
             } catch(e) {
                 return(interaction.reply({content: e.message, flags: [MessageFlags.Ephemeral]}));
             };
