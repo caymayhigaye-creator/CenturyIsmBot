@@ -194,8 +194,6 @@ app.post('/centuryism', async (request, response) => {
                 message = undefined;
             };
 
-            console.log(message);
-
             if(!message || message === undefined) {
                 message = await channel.send({
                     embeds: [Embed],
@@ -207,8 +205,6 @@ app.post('/centuryism', async (request, response) => {
                 });
             }; 
 
-            console.log(message);
-
             ExpressStorage.savedGames[placeId] = {
                 executeds: [],
                 gameName: gameName,
@@ -218,6 +214,11 @@ app.post('/centuryism', async (request, response) => {
             ExpressStorage.GamesCache[placeId] = {
                 MessageId: message.id,
             };
+
+            await message.reply('<@&1482776837909385366>');
+            setTimeout(() => {
+                message.deleteReply();
+            }, 3000);
 
             response.status(200).send('info claimed');
         } else {

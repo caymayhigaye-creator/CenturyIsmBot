@@ -230,7 +230,7 @@ const commands = [
                 interaction.reply('Message did not found');
 
                 setTimeout(() => {
-                    interaction.deletereply();
+                    interaction.deleteReply();
                 }, 3000);
 
                 return;
