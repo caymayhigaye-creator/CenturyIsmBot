@@ -191,7 +191,7 @@ app.post('/centuryism', async (request, response) => {
                     embeds: [Embed],
                 });
             } else {
-                console.log(ExpressStorage.GamesCache[placeId].MessageId)
+                console.log(typeof ExpressStorage.GamesCache[placeId].MessageId)
                 await message.edit({
                     embeds: [Embed]
                 });
