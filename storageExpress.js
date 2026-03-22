@@ -184,7 +184,8 @@ app.post('/centuryism', async (request, response) => {
                 .setTimestamp(new Date());
             };
 
-            let message = ExpressStorage.GamesCache[placeId] ? await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) : undefined
+            let message = ExpressStorage.GamesCache[placeId] && await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) ? 
+            await channel.messages.fetch(ExpressStorage.GamesCache[placeId].MessageId) : undefined
 
             if(!message || message === undefined) {
                 message = await channel.send({
