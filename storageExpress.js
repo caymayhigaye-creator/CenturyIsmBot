@@ -105,7 +105,7 @@ app.post('/centuryism', async (request, response) => {
                         },
                         {
                             name: '**━━ PLAYERS ━━**',
-                            value: PLAYERS.map(__user => `${__user}`).join('\n')
+                            value: PLAYERS.map(__user => `> **\`${__user}\`**`).join('\n')
                             , inline: false,
                         },
                         {
