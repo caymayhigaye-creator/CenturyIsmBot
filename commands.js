@@ -2,7 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilde
 import mongoose, { Mongoose } from "mongoose";
 import axios from 'axios';
 import { ExpressStorage } from './storageExpress.js';
-import { BotStorage, ReactionModel } from "./BotStorage.js";
+import { BotStorage, ReactionModel, SavedScriptsModel } from "./BotStorage.js";
 
 const commands = [
     {
@@ -259,7 +259,7 @@ const commands = [
                 await channel.bulkDelete(100, true);
 
                 const newMessage = await channel.send({
-                    embeds: [verifiyEmbed],
+                    embeds: [verifyEmbed],
                 });
 
                 BotStorage.ReactionData = {};
@@ -324,7 +324,102 @@ const commands = [
                 return(interaction.reply({content: e.message, flags: [MessageFlags.Ephemeral]}));
             };
         }
-    }
+    },
+    {
+        name: 'savescript',
+
+        data : new SlashCommandBuilder()
+        .setName('savescript')
+        .setDescription('save a script that you using')
+        .addStringOption(input => 
+            input.setName('channelid')
+            .setDescription('pick a channel where you want to save scripts.')
+            .setRequired(true)
+        )
+        .addStringOption(input => 
+            input.setName('source')
+            .setDescription('Save a script what you want to save')
+            .setRequired(true)
+        )
+        .toJSON(),
+
+
+        async execute(interaction, client) {
+            const channelId = interaction.options.getString('channelid');
+            const ScriptSource = interaction.options.getString('source');
+
+            // Küçük bir mantık düzeltmesi: !ScriptSource olmalı
+            if (!channelId || !ScriptSource) {
+                return interaction.reply({
+                    content: 'Channel or Script not found!',
+                    flags: [MessageFlags.Ephemeral],
+                });
+            }
+
+            try {
+                const trimedSource = ScriptSource.split('\n').map(s => s.trim()).filter(s => s.includes('require'));
+                const channel = await client.channels.cache.get(channelId);
+
+                if (!trimedSource || trimedSource.length === 0) return interaction.reply({ content: 'Script source not founded', flags: [MessageFlags.Ephemeral] });
+                if (!channel) return interaction.reply({ content: 'Channel not found', flags: [MessageFlags.Ephemeral] });
+
+                // Veritabanından güncel veriyi çek
+                let dbData = await SavedScriptsModel.findOne({ name: 'SavedScriptsData' });
+
+                // Embed Hazırlığı
+                const Embed = new EmbedBuilder()
+                    .setTitle('**━━ Saved Scripts ━━**')
+                    .setTimestamp(new Date())
+                    .setFooter({ text: '-- Saved Scripts --' });
+
+                // Mevcut scriptler + yenileri birleştir (Embed'de göstermek için)
+                const allScripts = dbData ? [...dbData.Scripts, ...trimedSource] : [...trimedSource];
+                
+                Embed.addFields({
+                    name: '**━━ SCRIPTS ━━**',
+                    value: `\`\`\`lua\n${allScripts.join('\n')}\n\`\`\``
+                });
+
+                let message;
+                try {
+                    // Eğer veritabanında kayıtlı bir mesaj ID varsa onu bulmaya çalış
+                    if (dbData && dbData.MessageId) {
+                        message = await channel.messages.fetch(dbData.MessageId);
+                    }
+                } catch (e) {
+                    message = null; // Mesaj silinmişse veya bulunamazsa null yap
+                }
+
+                if (!message) {
+                    // Mesaj yoksa YENİ gönder
+                    message = await channel.send({ embeds: [Embed] });
+                } else {
+                    // Mesaj varsa EDİTLE
+                    await message.edit({ embeds: [Embed] });
+                }
+
+                // VERİTABANINI GÜNCELLE
+                // Not: Burada BotStorage.SavedScripts yerine doğrudan objeyi yönetiyoruz
+                await SavedScriptsModel.updateOne(
+                    { name: 'SavedScriptsData' },
+                    {
+                        $push: { Scripts: { $each: trimedSource } },
+                        $set: { MessageId: message.id }, // Mesaj ID'sini her zaman güncelle
+                        $setOnInsert: { name: 'SavedScriptsData' }
+                    },
+                    { upsert: true }
+                );
+
+                return interaction.reply({ content: 'Successfully saved and updated!', flags: [MessageFlags.Ephemeral] });
+
+            } catch (e) {
+                console.error(e);
+                if (!interaction.replied) {
+                    interaction.reply({ content: `Error: ${e.message}`, flags: [MessageFlags.Ephemeral] });
+                }
+            }
+        }
+    },
 ];
 
 export default commands;

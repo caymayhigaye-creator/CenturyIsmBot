@@ -22,5 +22,8 @@ const NewSchema = new mongoose.Schema({
 });
 
 const ReactionModel = mongoose.model('ReactionData', NewSchema);
+const SavedScriptsModel = mongoose.model('SavedScripts', new mongoose.Schema({}, {
+    strict: false,
+}));
 
-export {BotStorage, ReactionModel};
+export {BotStorage, ReactionModel, SavedScriptsModel};
