@@ -102,7 +102,7 @@ const commands = [
                 );
             });   
             await interaction.respond(
-                filtered.slice(0, 25).map(gameId => ({name: `${ExpressStorage.savedGames[gameId].gameName} (${gameId})`, value:String(gameId)})),
+                filtered.slice(0, 25).map(gameId => ({name: `${ExpressStorage.savedGames[gameId].gameName} (${gameId})`, value:String(gameId)})) || {},
             );
         },
 
@@ -334,6 +334,7 @@ const commands = [
         .addStringOption(input => 
             input.setName('channelid')
             .setDescription('pick a channel where you want to save scripts.')
+            .setAutocomplete(true)
             .setRequired(true)
         )
         .addStringOption(input => 
@@ -342,6 +343,22 @@ const commands = [
             .setRequired(true)
         )
         .toJSON(),
+
+        AutoComplete: true,
+        async AutoCompleteFunction(interaction) {
+            const Focused = interaction.options.getFocused(true);
+
+            if (Focused.name == 'channelid') {
+                const channels = interaction.guild.channels.cache
+                .filter(c => c.type === 0)
+                .filter(c => c.name.toLowerCase().includes(Focused.value.toLowerCase()))
+                .slice(0, 25);
+
+                interaction.respond(
+                    channels.map(c => ({name: `#${c.name}`, value: c.id})),
+                );
+            };
+        },
 
 
         async execute(interaction, client) {
