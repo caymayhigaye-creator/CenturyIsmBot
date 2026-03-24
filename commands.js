@@ -379,7 +379,7 @@ const commands = [
                 
                 Embed.addFields({
                     name: '📂 Kayıtlı Script Listesi',
-                    value: formattedList || 'Henüz script yok.'
+                    value: formattedList || 'No Scripts Avaible.'
                 });
 
                 let message;
@@ -392,12 +392,26 @@ const commands = [
                     message = null; // Mesaj silinmişse veya bulunamazsa null yap
                 }
 
+                const fileContent = "-- Saved Scripts --\n\n" + allScripts.join('\n');
+
+                // 2. Metni Discord'un anlayacağı bir dosyaya (Attachment) çeviriyoruz
+                const { AttachmentBuilder } = require('discord.js');
+                const attachment = new AttachmentBuilder(Buffer.from(fileContent), { name: 'saved_scripts.lua' });
+
+                // 3. Mesajı gönderirken dosyayı ekliyoruz
                 if (!message) {
-                    // Mesaj yoksa YENİ gönder
-                    message = await channel.send({ embeds: [Embed] });
+                    message = await channel.send({ 
+                        content: "📂 **Saved Scripts Has Updated!**",
+                        files: [attachment] 
+                    });
                 } else {
-                    // Mesaj varsa EDİTLE
-                    await message.edit({ embeds: [Embed] });
+                    // NOT: Discord'da mevcut bir mesajdaki dosyayı "edit" ile değiştiremezsin. 
+                    // Bu yüzden eski mesajı silip yenisini atmak veya yeni bir dosya mesajı yollamak en iyisidir.
+                    await message.delete().catch(() => {}); 
+                    message = await channel.send({ 
+                        content: "🔄 **Saved Script List Has Updated:**",
+                        files: [attachment] 
+                    });
                 }
 
                 // VERİTABANINI GÜNCELLE
