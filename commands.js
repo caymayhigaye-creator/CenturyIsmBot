@@ -348,16 +348,21 @@ const commands = [
         async AutoCompleteFunction(interaction) {
             const Focused = interaction.options.getFocused(true);
 
-            if (Focused.name == 'channelid') {
-                const channels = interaction.guild.channels.cache
-                .filter(c => c.type === 0)
-                .filter(c => c.name.toLowerCase().includes(Focused.value.toLowerCase()))
-                .slice(0, 25);
+            if (Focused.name === 'channelid') {
+                // Guild (Sunucu) kontrolü eklemek her zaman hayat kurtarır
+                if (!interaction.guild) return;
 
-                interaction.respond(
-                    channels.map(c => ({name: `#${c.name}`, value: c.id})),
-                );
-            };
+                const channels = interaction.guild.channels.cache
+                    .filter(c => c.type === 0) // Sadece Metin Kanalları
+                    .filter(c => c.name.toLowerCase().includes(Focused.value.toLowerCase()))
+                    // ÇÖZÜM: .toJSON() veya .first(25) kullanmalısın
+                    .first(25); 
+
+                // await eklemek ve hata yakalamak (catch) çökmeleri engeller
+                await interaction.respond(
+                    channels.map(c => ({ name: `#${c.name}`, value: c.id }))
+                ).catch(() => {}); 
+            }
         },
 
 
