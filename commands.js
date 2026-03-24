@@ -374,10 +374,12 @@ const commands = [
 
                 // Mevcut scriptler + yenileri birleştir (Embed'de göstermek için)
                 const allScripts = dbData ? [...dbData.Scripts, ...trimedSource] : [...trimedSource];
+
+                const formattedList = allScripts.map((s, index) => `**${index + 1}.** \`${s}\``).join('\n');
                 
                 Embed.addFields({
-                    name: '**━━ SCRIPTS ━━**',
-                    value: `\`\`\`lua\n${allScripts.join('\n')}\n\`\`\``
+                    name: '📂 Kayıtlı Script Listesi',
+                    value: formattedList || 'Henüz script yok.'
                 });
 
                 let message;
