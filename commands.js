@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events, InteractionCollector, MessageFlags} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, Embed, CategoryChannel, ButtonBuilder, IntegrationExpireBehavior, verifyString, Events, InteractionCollector, MessageFlags, AttachmentBuilder} from "discord.js";
 import mongoose, { Mongoose } from "mongoose";
 import axios from 'axios';
 import { ExpressStorage } from './storageExpress.js';
@@ -395,7 +395,6 @@ const commands = [
                 const fileContent = "-- Saved Scripts --\n\n" + allScripts.join('\n');
 
                 // 2. Metni Discord'un anlayacağı bir dosyaya (Attachment) çeviriyoruz
-                const { AttachmentBuilder } = require('discord.js');
                 const attachment = new AttachmentBuilder(Buffer.from(fileContent), { name: 'saved_scripts.lua' });
 
                 // 3. Mesajı gönderirken dosyayı ekliyoruz
